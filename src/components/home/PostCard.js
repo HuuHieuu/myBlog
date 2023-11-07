@@ -11,20 +11,26 @@ export default function MediaCard() {
     <Card sx={{ maxWidth: 345 }}>
       <CardMedia
         sx={{ height: 140 }}
-        image="https://st.quantrimang.com/photos/image/2021/09/05/Co-Vietnam.png"
+        image="https://i1-dulich.vnecdn.net/2022/05/11/hoan-kiem-lake-7673-1613972680-1508-1652253984.jpg?w=0&h=0&q=100&dpr=1&fit=crop&s=2wB1cBTUcNKuk68nrG6LMQ"
         title="green iguana"
       />
       <CardContent>
         <Typography gutterBottom variant="h5" component="div" textAlign="left"> 
-          Lizard
+          Demo Thẻ Bài Viết
         </Typography>
         <Typography variant="body2" color="text.secondary" textAlign="left"> 
-          Lizards are a widespread group of squamate reptiles, with over 6,000
-          species, ranging across all continents except Antarctica
+          Hiển thị một phần trích nhỏ của bài viết này,
+          cho người dùng đọc qua ở đây!
+        </Typography>
+        <Typography variant="body2" color="text.secondary" textAlign="left"> 
+          <i>
+            <br></br>
+            Đăng bởi <a href='#'>TÊN NGƯỜI VIẾT</a> vào 07/11/2023
+          </i>
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="small">Đọc Thêm</Button>
+        <Button size="small">Chi Tiết</Button>
       </CardActions>
     </Card>
   );

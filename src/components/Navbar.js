@@ -17,7 +17,7 @@ function Navbar() {
     return (
         <nav className="navbar navbar-expand-lg navbar-light" id="mainNav">
             <div className="container px-4 px-lg-5">
-                <a className="navbar-brand" href="index.html">HLQ & DPT</a>
+                <a className="navbar-brand" href="index.html">Blog Không Tên</a>
                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
                     Menu
                     <i className="fas fa-bars"></i>
@@ -30,11 +30,12 @@ function Navbar() {
                                 DANH MỤC
                             </a>
                             <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a className="dropdown-item" href="#">Category 1</a></li>
-                                <li><a className="dropdown-item" href="#">Category 2</a></li>
-                                <li><a className="dropdown-item" href="#">Category 3</a></li>
+                                <li><a className="dropdown-item" href="#">Danh Mục 1</a></li>
+                                <li><a className="dropdown-item" href="#">Danh Mục 2</a></li>
+                                <li><a className="dropdown-item" href="#">Danh Mục 3</a></li>
                             </ul>
                         </li>
+                        <li className="nav-item"><a className="nav-link px-lg-3 py-3 py-lg-4" href="index.html">GIỚI THIỆU</a></li>
                         <li className="nav-item"><a className="nav-link px-lg-3 py-3 py-lg-4" href="about.html">LIÊN HỆ</a></li>
                         <li className="nav-item"><a className="nav-link px-lg-3 py-3 py-lg-4" href="admin.html">ĐĂNG BÀI</a></li>
                     </ul>
