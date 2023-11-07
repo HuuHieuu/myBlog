@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { Outlet, Link } from "react-router-dom";
 
 function Navbar() {
     useEffect(() => {
@@ -17,27 +18,28 @@ function Navbar() {
     return (
         <nav className="navbar navbar-expand-lg navbar-light" id="mainNav">
             <div className="container px-4 px-lg-5">
-                <a className="navbar-brand" href="index.html">Blog Không Tên</a>
+                <Link className="navbar-brand" to="/">Blog Không Tên</Link>
                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
                     Menu
                     <i className="fas fa-bars"></i>
                 </button>
                 <div className="collapse navbar-collapse" id="navbarResponsive">
                     <ul className="navbar-nav ms-auto py-4 py-lg-0">
-                        <li className="nav-item"><a className="nav-link px-lg-3 py-3 py-lg-4" href="index.html">TRANG CHỦ</a></li>
+                        <li className="nav-item"><Link className="nav-link px-lg-3 py-3 py-lg-4" to="index.html">TRANG CHỦ</Link></li>
                         <li className="nav-item dropdown categories">
-                            <a className="nav-link px-lg-3 py-3 py-lg-4" href="#" id="navbarDropdown" role="button" aria-expanded="false">
+                            <Link className="nav-link px-lg-3 py-3 py-lg-4" to="#" id="navbarDropdown" role="button" aria-expanded="false">
                                 DANH MỤC
-                            </a>
+                            </Link>
                             <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a className="dropdown-item" href="#">Danh Mục 1</a></li>
-                                <li><a className="dropdown-item" href="#">Danh Mục 2</a></li>
-                                <li><a className="dropdown-item" href="#">Danh Mục 3</a></li>
+                                <li><Link className="dropdown-item" to="#">Danh Mục 1</Link></li>
+                                <li><Link className="dropdown-item" to="#">Danh Mục 2</Link></li>
+                                <li><Link className="dropdown-item" to="#">Danh Mục 3</Link></li>
                             </ul>
                         </li>
-                        <li className="nav-item"><a className="nav-link px-lg-3 py-3 py-lg-4" href="index.html">GIỚI THIỆU</a></li>
-                        <li className="nav-item"><a className="nav-link px-lg-3 py-3 py-lg-4" href="about.html">LIÊN HỆ</a></li>
-                        <li className="nav-item"><a className="nav-link px-lg-3 py-3 py-lg-4" href="admin.html">ĐĂNG BÀI</a></li>
+                        <li className="nav-item"><Link className="nav-link px-lg-3 py-3 py-lg-4" to="index.html">GIỚI THIỆU</Link></li>
+                        <li className="nav-item"><Link className="nav-link px-lg-3 py-3 py-lg-4" to="index.html">GIỚI THIỆU2</Link></li>
+                        <li className="nav-item"><Link className="nav-link px-lg-3 py-3 py-lg-4" to="about.html">LIÊN HỆ</Link></li>
+                        <li className="nav-item"><Link className="nav-link px-lg-3 py-3 py-lg-4" to="admin.html">ĐĂNG BÀI</Link></li>
                     </ul>
                 </div>
             </div>

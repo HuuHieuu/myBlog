@@ -5,6 +5,7 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import { Outlet, Link } from "react-router-dom";
 
 export default function MediaCard() {
   return (
@@ -25,8 +26,10 @@ export default function MediaCard() {
         <Typography variant="body2" color="text.secondary" textAlign="left"> 
           <i>
             <br></br>
-            Đăng bởi <a href='#'>TÊN NGƯỜI VIẾT</a> vào 07/11/2023
+            Đăng bởi <Link to={"#"}>TÊN NGƯỜI VIẾT</Link>
+            <br></br>
           </i>
+          <br></br>07/11/2023
         </Typography>
       </CardContent>
       <CardActions>

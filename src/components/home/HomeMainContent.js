@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import PostCardList from './PostCardList';
+import { Outlet, Link } from "react-router-dom";
 
 function MainContent() {
     const [menuOpen, setMenuOpen] = useState(false);
@@ -69,9 +70,9 @@ function MainContent() {
                         </div>
                         {menuOpen && (
                             <>
-                                <a style={{...menuItemStyle, ...subMenuItemStyle}} href="#">Danh Mục 1</a>
-                                <a style={{...menuItemStyle, ...subMenuItemStyle}} href="#">Danh Mục 2</a>
-                                <a style={{...menuItemStyle, ...subMenuItemStyle}} href="#">Danh Mục 3</a>
+                                <Link style={{...menuItemStyle, ...subMenuItemStyle}} to="#">Danh Mục 1</Link>
+                                <Link style={{...menuItemStyle, ...subMenuItemStyle}} to="#">Danh Mục 2</Link>
+                                <Link style={{...menuItemStyle, ...subMenuItemStyle}} to="#">Danh Mục 3</Link>
                             </>
                         )}
                     </div>
@@ -80,7 +81,7 @@ function MainContent() {
                     <PostCardList/>
                 </div>
                 <div className="d-flex justify-content-end mb-4">
-                    <a 
+                    <Link
                         className="btn btn-primary text-uppercase" 
                         style={{
                         marginRight: 30, 
@@ -89,12 +90,12 @@ function MainContent() {
                         border: '1px solid black',
                         transition: 'background-color 0.3s, color 0.3s' 
                         }} 
-                        href="#!"
+                        to="#!"
                         onMouseOver={(e) => {e.target.style.color = '#fff'; e.target.style.backgroundColor = '#000';}} 
                         onMouseOut={(e) => {e.target.style.color = 'black'; e.target.style.backgroundColor = '#fff';}} 
                     >
                         ĐỌC THÊM →
-                    </a>
+                    </Link>
                 </div>
 
             </div>
