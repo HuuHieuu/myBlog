@@ -1,5 +1,8 @@
 import React, { useEffect } from "react";
-import { Outlet, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
+import {FaSearch} from 'react-icons/fa';
+import './NavBar.css';
+
 
 function Navbar() {
     useEffect(() => {
@@ -18,6 +21,10 @@ function Navbar() {
         <nav className="navbar navbar-expand-lg navbar-light" id="mainNav">
             <div className="container px-4 px-lg-5">
                 <Link className="navbar-brand" to="/">Blog Không Tên</Link>
+                <div className="input-wrapper">
+                    <FaSearch id="search-icon"/>
+                    <input placeholder="Tìm kiếm"/>
+                </div>
                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
                     Menu
                     <i className="fas fa-bars"></i>
