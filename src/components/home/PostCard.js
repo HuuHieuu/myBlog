@@ -3,7 +3,6 @@ import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
-import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { Outlet, Link } from "react-router-dom";
 
@@ -17,7 +16,7 @@ export default function MediaCard() {
       />
       <CardContent>
         <Typography gutterBottom variant="h5" component="div" textAlign="left"> 
-          Demo Thẻ Bài Viết
+          <Link to={"/onepost"}>Demo Thẻ Bài Viết</Link>
         </Typography>
         <Typography variant="body2" color="text.secondary" textAlign="left"> 
           Hiển thị một phần trích nhỏ của bài viết này,
@@ -32,9 +31,6 @@ export default function MediaCard() {
           <br></br>07/11/2023
         </Typography>
       </CardContent>
-      <CardActions>
-        <Button size="small">Chi Tiết</Button>
-      </CardActions>
     </Card>
   );
 }
