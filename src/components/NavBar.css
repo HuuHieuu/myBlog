@@ -18,13 +18,29 @@ input{
     width: 100%;
     margin-left: 5px;
 }
+
 input::placeholder{
     color: #ddd;
 }
+
 input:focus{
     outline: none;
 }
 
 #search-icon{
     color: white;
+}
+
+@media screen and (max-width: 991px) {
+  input {
+    width: 100%;
+  }
+
+  .input-wrapper{
+    margin: 0;
+  }
+
+  #search-icon, input::placeholder{
+    color: black;
+}
 }
