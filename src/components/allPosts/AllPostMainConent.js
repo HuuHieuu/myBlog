@@ -3,7 +3,8 @@ import PostCardList from '../PostCardList';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
-import './AllPostMainContent.css'; // Import the CSS file
+import TopButton from '../TopButton';
+import './AllPostMainContent.css';
 
 function MainContent() {
   const MenuIcon = <FontAwesomeIcon icon={faBars} style={{ marginTop: '5px' }}/>;
@@ -62,9 +63,7 @@ function MainContent() {
           <PostCardList />
         </div>
       </div>
-      <a className="round-button" href="#top">
-        ↑
-      </a>
+      <TopButton/>
     </div>
   );
 }

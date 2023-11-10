@@ -1,26 +1,9 @@
-import React, {useState} from 'react';
+import React from 'react';
 import PostCardList from '../PostCardList';
 import { Link } from "react-router-dom";
+import TopButton from '../TopButton';
 
 function MainContent() {
-
-    const roundButtonStyle = {
-        width: '50px',
-        height: '50px',
-        borderRadius: '25px',
-        backgroundColor: '#fff',
-        fontSize: 30,
-        color: 'black',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        position: 'fixed',
-        bottom: '20px',
-        right: '20px',
-        zIndex: '999',
-        textDecoration: 'none',
-        border: '2px solid black',
-    };
 
     return (
         <div className="container px-4 px-lg-5">
@@ -48,7 +31,7 @@ function MainContent() {
                     </Link>
                 </div>
             </div>
-            <a style={roundButtonStyle} href="#top">↑</a>
+            <TopButton/>
         </div>
     );
 }

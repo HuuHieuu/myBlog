@@ -1,23 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-
-const roundButtonStyle = {
-    width: '50px',
-    height: '50px',
-    borderRadius: '25px',
-    backgroundColor: '#fff',
-    fontSize: 30,
-    color: 'black',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    position: 'fixed',
-    bottom: '20px',
-    right: '20px',
-    zIndex: '999',
-    textDecoration: 'none',
-    border: '2px solid black',
-};
+import TopButton from '../TopButton';
 
 
 const PostContent = () => {
@@ -71,7 +54,7 @@ const PostContent = () => {
         </div>
       </div>
     </article>
-    <a style={roundButtonStyle} href="#top">↑</a>
+    <TopButton/>
     </div>
   );
 };
