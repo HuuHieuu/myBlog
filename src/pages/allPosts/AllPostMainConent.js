@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import PostCardList from '../PostCardList';
+import PostCardList from '../../components/PostCardList';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
-import TopButton from '../TopButton';
+import TopButton from '../../components/TopButton';
 import './AllPostMainContent.css';
 
 function MainContent() {

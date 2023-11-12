@@ -1,9 +1,9 @@
 import React, {useState} from 'react';
 
-import Header from "../Header";
-import NavBar from "../Navbar";
+import Header from "../../components/Header";
+import NavBar from "../../components/Navbar";
 import MainContent from './AllPostMainConent';
-import Footer from "../Footer";
+import Footer from "../../components/Footer";
 
 function AllPost(){
     return(

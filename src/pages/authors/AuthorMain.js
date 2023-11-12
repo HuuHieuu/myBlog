@@ -1,7 +1,7 @@
 import React from "react";
 
-import TopButton from "../TopButton"; 
-import PostCardList from "../PostCardList";
+import TopButton from "../../components/TopButton"; 
+import PostCardList from "../../components/PostCardList";
 function AuthorMain(){
     return(
         <div className="container px-4 px-lg-5">

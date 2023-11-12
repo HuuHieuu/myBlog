@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import {FaSearch} from 'react-icons/fa';
 import './NavBar.css';
@@ -15,7 +15,10 @@ function Navbar() {
         categoriesMenu.addEventListener('mouseleave', () => {
             categoriesMenu.querySelector('.dropdown-menu').classList.remove('show');
         });
+
+        
     }, []);
+
 
     return (
         <nav className="navbar navbar-expand-lg navbar-light" id="mainNav">
@@ -44,7 +47,8 @@ function Navbar() {
                         </li>
                         <li className="nav-item"><Link className="nav-link px-lg-3 py-3 py-lg-4" to="index.html">GIỚI THIỆU</Link></li>
                         <li className="nav-item"><Link className="nav-link px-lg-3 py-3 py-lg-4" to="about.html">LIÊN HỆ</Link></li>
-                        <li className="nav-item"><Link className="nav-link px-lg-3 py-3 py-lg-4" to="admin.html">ĐĂNG BÀI</Link></li>
+                        <li className="nav-item"><Link className="nav-link px-lg-3 py-3 py-lg-4" to="admin.html">ĐĂNG NHẬP</Link>
+                        </li>
                     </ul>
                 </div>
             </div>

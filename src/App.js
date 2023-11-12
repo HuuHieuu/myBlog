@@ -1,10 +1,10 @@
 import './App.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
-import Home from "./components/home/home"
-import Post from './components/post/post'
-import AllPost from './components/allPosts/allposts'
-import Author from './components/authors/Author';
+import Home from "./pages/home/home"
+import Post from './pages/post/post'
+import AllPost from './pages/allPosts/allposts'
+import Author from './pages/authors/Author';
 
 const App = () => {
   return (

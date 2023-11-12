@@ -1,9 +1,9 @@
 import React from "react";
 
-import NavBar from "../Navbar";
-import AuthorHeader from "./AuthorHeader";
+import NavBar from "../../components/Navbar";
+import AuthorHeader from "../authors/AuthorHeader";
 import AuthorMain from "./AuthorMain";
-import Footer from "../Footer";
+import Footer from "../../components/Footer";
 
 function Author(){
     return(
