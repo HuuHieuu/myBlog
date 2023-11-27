@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 
 function Header() {
     const [backgroundImage, setBackgroundImage] = useState([
-        "url('https://i1-dulich.vnecdn.net/2022/05/11/hoan-kiem-lake-7673-1613972680-1508-1652253984.jpg?w=0&h=0&q=100&dpr=1&fit=crop&s=2wB1cBTUcNKuk68nrG6LMQ')",
-        "url('https://a.cdn-hotels.com/gdcs/production7/d644/58a05166-51bf-4797-9cda-33da7db7233f.jpg?impolicy=fcrop&w=1600&h=1066&q=medium')",
-        "url('https://images.unsplash.com/photo-1555921015-5532091f6026?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')"
+        "url('http://congnghevadoisong.vn/files/VPBANK_HANOI_MARATHON_2022_1.jpg')",
+        "url('http://congnghevadoisong.vn/files/VPBANK_HANOI_MARATHON_2022_3.jpg')",
+        "url('https://doanhnhanplus.vn/wp-content/uploads/2017/11/24132052_163691874229099_7935479807625083105_o.jpg')"
     ]);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
@@ -25,7 +25,7 @@ function Header() {
                 <div className="row gx-4 gx-lg-5 justify-content-center">
                     <div className="col-md-10 col-lg-8 col-xl-7">
                         <div className="site-heading">
-                            <h1>BLOG <br/> "KHÔNG TÊN"</h1>
+                            <h1>BLOG <br/> CHO CÁC RUNNER</h1>
                             <span className="subheading">
                                 Một trang blog nhỏ từ Thủ đô Hà Nội
                                 <img height="25" src="https://upload.wikimedia.org/wikipedia/commons/0/07/Flag_of_Vietnam-Animated.gif" style={{ marginLeft: '5px' }} ></img>
