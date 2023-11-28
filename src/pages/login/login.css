@@ -1,6 +1,12 @@
+.flex-container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-image: url(../../assets/image/background/background.jpeg);
+}
 .login-container {
-    max-width: 24%;
-    margin: 0 auto;
+    flex-basis: 24%;
     padding: 20px;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -18,19 +24,21 @@
     text-align: center;
     margin-bottom: 20px;
     font-weight: 500;
+    font-family: 'Roboto', sans-serif;
+    color: white;
   }
   .login-container input {
     padding: 8px;
     margin-bottom: 16px;
-    border: 1px solid black;
+    border: 1px solid rgb(208, 205, 205);
     /* box-shadow: 5px 5px rgb(195, 190, 190); */
     border-radius: 15px;
     margin-left: 0;
-    color: black;
+    color: white
   }
 
   .login-container input::placeholder{
-    color: #484747;
+    color: #d1d0d0;
   }
   
   button {
@@ -47,3 +55,17 @@
     background-color: #0056b3;
   }
   
+  .flex-container .login-container .sign-up-div{
+    margin-top: 8%;
+  }
+  .flex-container .login-container .sign-up-div label{
+    color: white;
+  }
+  .flex-container .login-container .sign-up-div a{
+    margin-left: 6%;
+    color: white;
+  }
+  .flex-container .login-container .sign-up-div a:hover{
+    cursor: pointer;
+    color: #2278d5;
+  }

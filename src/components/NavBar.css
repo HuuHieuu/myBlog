@@ -20,6 +20,19 @@ input{
     color: white;
 }
 
+.link {
+  width: 100%;
+  padding-left: 10%;
+}
+.link .linkto{
+  width: 100%;
+}
+.link:hover{
+  cursor: pointer;
+  color: aqua;
+}
+
+
 input::placeholder{
     color: #ddd;
 }

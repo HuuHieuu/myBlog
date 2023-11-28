@@ -6,6 +6,7 @@ import Post from './pages/post/post'
 import AllPost from './pages/allPosts/allposts'
 import Author from './pages/authors/Author';
 import Login from './pages/login/login';
+import SignUp from './pages/signup/SignUp';
 
 const App = () => {
   return (
@@ -16,6 +17,7 @@ const App = () => {
         <Route path='/allposts' element={<AllPost/>}/>
         <Route path='/author' element={<Author/>}/>
         <Route path='/login' element={<Login/>}/>
+        <Route path='/signup' element={<SignUp/>}/>
       </Routes>
     </Router>
   );
