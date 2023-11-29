@@ -1,10 +1,12 @@
-import { Link as scrollLink, animateScroll as scroll} from 'react-scroll'
+import { useUserContext } from "./Context/UserContext";
 import React, { useState, useEffect,  } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {FaSearch} from 'react-icons/fa';
 import './NavBar.css';
 
 function Navbar() {
+    const { isLoggedIn, user, logout } = useUserContext();
+    const [isMenuOpen, setMenuOpen] = useState(false);
     const navigate = useNavigate();
     const handleClick = () => {
         // Thực hiện chuyển hướng đến '/onepost'
@@ -58,7 +60,7 @@ function Navbar() {
                             <Link className="nav-link px-lg-3 py-3 py-lg-4" to="/allposts" id="navbarDropdown" role="button" aria-expanded="false" 
                             onClick={handleClick}
                             >
-                                DANH MỤC
+                                BÀI VIẾT
                             </Link>
                             {/* <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <li><Link className="dropdown-item" to="">Esport</Link></li>
@@ -102,7 +104,23 @@ function Navbar() {
                         </li>
                         <li className="nav-item"><Link className="nav-link px-lg-3 py-3 py-lg-4" to="index.html">GIỚI THIỆU</Link></li>
                         {/* <li className="nav-item"><Link className="nav-link px-lg-3 py-3 py-lg-4" to="about.html">LIÊN HỆ</Link></li> */}
-                        <li className="nav-item"><Link className="nav-link px-lg-3 py-3 py-lg-4" to="/login">ĐĂNG NHẬP</Link>
+                        <li className="nav-item">
+                            {isLoggedIn ? (
+                                <div className="user-avatar">
+                                <img src={user.avatar} alt="User"  onClick={() => setMenuOpen(!isMenuOpen)}/>
+                                {isMenuOpen && (
+                                    <div className="logout-menu">
+                                    <button onClick={logout}>Đăng xuất</button>
+                                    </div>
+                                )}
+                                {/* <Link className="nav-link px-lg-3 py-3 py-lg-4" to='/' onClick={logout}>Đăng xuất</Link> */}
+                                </div>
+                            ) : (
+                                <Link className="nav-link px-lg-3 py-3 py-lg-4" to="/login">
+                                    ĐĂNG NHẬP
+                                </Link>
+                            )}
+                            {/* <Link className="nav-link px-lg-3 py-3 py-lg-4" to="/login">ĐĂNG NHẬP</Link> */}
                         </li>
                     </ul>
                 </div>

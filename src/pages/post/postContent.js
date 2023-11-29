@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import TopButton from '../../components/TopButton';
+import Comment from '../../components/comment/Comment';
 
 
 const PostContent = () => {
@@ -54,6 +55,7 @@ const PostContent = () => {
         </div>
       </div>
     </article>
+    
     <TopButton/>
     </div>
   );

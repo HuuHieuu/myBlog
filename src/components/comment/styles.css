@@ -1,0 +1,46 @@
+/* styles.css */
+
+.comment-box {
+    width: 40%;
+    margin-left: 10%;
+  }
+  
+  .comment-list {
+    margin-bottom: 20px;
+  }
+  
+  .comment {
+    list-style: none;
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .comment-form {
+    margin-top: 20px;
+  }
+  
+  .comment-form .login-placeholder:hover{
+    cursor: pointer;
+    color: #5e5656;
+  }
+
+  textarea {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+  }
+  
+  button {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #45a049;
+  }
+  
