@@ -45,6 +45,45 @@ input:focus{
     color: white;
 }
 
+.user-avatar{
+  position: relative;
+  cursor: pointer;
+}
+
+.menu-open {
+  min-width: 175px;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: transparent;
+  /* border: 1px solid #ccc; */
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 1;
+}
+
+.menu-open button{
+  display: block;
+  width: 100%;
+  padding: 8px;
+  text-align: left;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.menu-open button:hover{
+  background-color: #797474;
+}
+
+.user-avatar-df{
+  width: 40px;
+  border-radius: 50%;
+  margin-top: 11px;
+}
+
+
+
 @media screen and (max-width: 991px) {
   input {
     width: 100%;

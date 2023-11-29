@@ -3,6 +3,7 @@ import React, { useState, useEffect,  } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {FaSearch} from 'react-icons/fa';
 import './NavBar.css';
+import avatar from '../assets/image/avatar1.jpeg'
 
 function Navbar() {
     const { isLoggedIn, user, logout } = useUserContext();
@@ -19,8 +20,11 @@ function Navbar() {
             targetElement.scrollIntoView({ behavior: 'smooth' });
           }
         }, 0);
-      };
+    };
 
+    const profile = () =>{
+        navigate('/profile')
+    }
 
     // useEffect(() => {
 
@@ -107,13 +111,17 @@ function Navbar() {
                         <li className="nav-item">
                             {isLoggedIn ? (
                                 <div className="user-avatar">
-                                <img src={user.avatar} alt="User"  onClick={() => setMenuOpen(!isMenuOpen)}/>
-                                {isMenuOpen && (
-                                    <div className="logout-menu">
-                                    <button onClick={logout}>Đăng xuất</button>
-                                    </div>
-                                )}
-                                {/* <Link className="nav-link px-lg-3 py-3 py-lg-4" to='/' onClick={logout}>Đăng xuất</Link> */}
+                                    <img className="user-avatar-df" src={avatar} alt="User"  onClick={() => setMenuOpen(!isMenuOpen)}/>
+                                    {isMenuOpen && (
+                                        <div className="menu-open">
+                                            <div className="profile">
+                                                <button onClick={profile}>Hồ sơ cá nhân</button>
+                                            </div>
+                                            <div className="logout-menu">
+                                                <button onClick={logout}>Đăng xuất</button>
+                                            </div>
+                                        </div>
+                                    )}
                                 </div>
                             ) : (
                                 <Link className="nav-link px-lg-3 py-3 py-lg-4" to="/login">

@@ -9,25 +9,28 @@ const LoginForm = () => {
   const { login } = useUserContext();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleUsernameChange = (event) => {
     setUsername(event.target.value);
+    setErrorMessage('');
   };
 
   const handlePasswordChange = (event) => {
     setPassword(event.target.value);
+    setErrorMessage('');
   };
 
   const handleLogin = () => {
     // Xử lý logic đăng nhập ở đây
     if(username == "" || password ==""){
-      console.log('Thất bại')
+      setErrorMessage('Vui lòng nhập đầy đủ tên tài khoản và mật khẩu.');
     }else if( username == "hieu" && password == "1"){
       console.log(`Đăng nhập với tên người dùng: ${username} và mật khẩu: ${password}`);
       login({ username, avatar: {avatar} });
-      navigate('/onepost')
+      navigate('/')
     }else{
-      console.log("Đăng nhập thất bại.")
+      setErrorMessage('Tên tài khoản hoặc mật khẩu không đúng.');
     }
   };
 
@@ -39,6 +42,7 @@ const LoginForm = () => {
         <form>
             <input type="text" placeholder='Tài khoản' value={username} onChange={handleUsernameChange} />
             <input type="password" placeholder='Mật khẩu' value={password} onChange={handlePasswordChange} />
+            {errorMessage && <div className="error-message">{errorMessage}</div>}
             <button type="button" onClick={handleLogin}>
               Đăng nhập
             </button>
