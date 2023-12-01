@@ -1,0 +1,16 @@
+.App .blog-form label{
+    display: flex;
+    white-space: nowrap;
+    margin-left: 1%;
+}
+
+.App .blog-form label input{
+    border: 1px solid black;
+    color: black;
+    width: 190px;
+}
+
+.form-css{
+    display: flex;
+    flex-wrap: wrap ;
+}

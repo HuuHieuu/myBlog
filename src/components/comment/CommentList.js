@@ -9,7 +9,7 @@ function CommentList({ comments }) {
       <h3>Comments:</h3>
       <ul>
         {comments.map((comment, index) => (
-          <Comment key={index} text={comment.text} />
+          <Comment key={index} user={comment.user} text={comment.text} />
         ))}
       </ul>
     </div>

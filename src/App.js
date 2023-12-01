@@ -7,6 +7,9 @@ import AllPost from './pages/allPosts/allposts'
 import Author from './pages/authors/Author';
 import Login from './pages/login/login';
 import SignUp from './pages/signup/SignUp';
+import NewPostEditor from './pages/newPost';
+import Admin from './pages/admin/admin';
+
 
 const App = () => {
   return (
@@ -19,6 +22,8 @@ const App = () => {
           <Route path='/author' element={<Author/>}/>
           <Route path='/login' element={<Login/>}/>
           <Route path='/signup' element={<SignUp/>}/>
+          <Route path='new-post' element={<NewPostEditor/>}/>
+          <Route path='/admin' element={<Admin/>}/>
         </Routes>
       </Router>
     </UserProvider>
