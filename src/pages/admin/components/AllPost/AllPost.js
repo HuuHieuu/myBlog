@@ -1,8 +1,12 @@
+import React, {useState} from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import './AllPost.css'
+import MyEditor from '../../../../components/MyEditor';
 function AllPost() {
+    const [showEditor, setShowEditor] = useState(false);
     return ( 
         <>
             <div className='post-container'>
@@ -19,12 +23,21 @@ function AllPost() {
                                     <FontAwesomeIcon icon={faTrashAlt}/>
                                     Trash
                                 </a>
-                                <a href="#" class="btn primary-btn small-btn">
+                                <a href="#" class="btn primary-btn small-btn" onClick={() => setShowEditor(true)}>
                                     <FontAwesomeIcon icon={faPlus}/>
                                     Add Post
                                 </a>
                             </div>
                         </div>
+                                {showEditor && (<div className='popup'>
+                                    <div style={{textAlign:'left', marginLeft:'2%', marginBottom:'1%'}}>
+                                        <button className="close-button" onClick={() => setShowEditor(false)}>
+                                            <FontAwesomeIcon icon={faTimes} />
+                                        </button>
+                                    </div>
+                                    <MyEditor/>
+                                </div>)}
+
                     </div>
                     <div className='table-post'>
                         <table style={{border:'1px solid', width:'75%'}}>

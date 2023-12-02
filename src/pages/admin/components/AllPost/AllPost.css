@@ -100,3 +100,13 @@
     color: black;
     width: 20%;
 }
+
+.post-container .post-content .popup .close-button{
+    background-color: transparent;
+    margin-top: 0;
+    color: black;
+}
+
+.post-container .post-content .popup .close-button:hover{
+    opacity: 0.6;
+}
