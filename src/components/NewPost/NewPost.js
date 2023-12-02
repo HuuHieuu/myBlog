@@ -14,8 +14,9 @@ function NewPost() {
     const handleNewPostClick = () => {
         if (isLoggedIn) {
           // Người dùng đăng nhập, chuyển hướng đến trang tạo bài viết mới
-          navigate('/new-post');
-        } else {
+          navigate('/admin');
+        }
+         else {
           // Người dùng chưa đăng nhập, chuyển hướng đến trang đăng nhập
           navigate('/login');
         }
