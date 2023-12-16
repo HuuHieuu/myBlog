@@ -1,4 +1,4 @@
-import { useUserContext } from "./Context/UserContext";
+import { jwtDecode } from "jwt-decode";
 import React, { useState, useEffect,  } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {FaSearch} from 'react-icons/fa';
@@ -6,9 +6,11 @@ import {isAuthenticated} from '../utils/auth'
 import './NavBar.css';
 import avatar from '../assets/image/avatar1.jpeg'
 
+
 function Navbar() {
     const [loggedIn, setLoggedIn] = useState(isAuthenticated());
     const [isMenuOpen, setMenuOpen] = useState(false);
+    const [userRole, setUserRole] = useState('');
     const navigate = useNavigate();
     const handleLogout = () => {
         // Xóa token khi đăng xuất
@@ -32,6 +34,32 @@ function Navbar() {
     const profile = () =>{
         navigate('/profile')
     }
+
+    const admin = () =>{
+        navigate('/admin')
+    }
+
+    useEffect(() => {
+        // Lấy token từ localStorage (hoặc từ nơi bạn lưu trữ token)
+        const token = localStorage.getItem('accessToken');
+    
+        if (token) {
+        //   // Giải mã token để lấy thông tin người dùng, bao gồm vai trò (role)
+        //   const decodedToken = jwtDecode(token);
+          
+        //   // Lấy vai trò từ decoded token và cập nhật state
+        //   setUserRole(decodedToken.roles);
+            try {
+                const decodedToken = jwtDecode(token);
+                setUserRole(decodedToken.roles);
+            } catch (error) {
+                console.error('Error decoding token:', error);
+            }
+        }
+      }, []);
+
+      
+
 
     // useEffect(() => {
 
@@ -73,54 +101,19 @@ function Navbar() {
                             >
                                 BÀI VIẾT
                             </Link>
-                            {/* <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><Link className="dropdown-item" to="">Esport</Link></li>
-                                <li className='link'>
-                                    <Link
-                                        activeClass="active"
-                                        to="content0"
-                                        spy={true}
-                                        smooth={true}
-                                        offset={-70}
-                                        duration={500}>
-                                            Esport
-                                    </Link>
-                                </li>
-                                <li className='link'>
-                                    <Link
-                                        activeClass="active"
-                                        to="content1"
-                                        spy={true}
-                                        smooth={true}
-                                        offset={-70}
-                                        duration={500}>
-                                            Thời trang
-                                    </Link>
-                                </li>
-                                <li className='link'>
-                                    <Link
-                                        activeClass="active"
-                                        to="content2"
-                                        spy={true}
-                                        smooth={true}
-                                        offset={-70}
-                                        duration={500}>
-                                            Thể thao
-                                    </Link>
-                                </li>
-
-                                <li><Link className="dropdown-item" to="#">Thời trang</Link></li>
-                                <li><Link className="dropdown-item" to="#">Thể thao</Link></li>
-                            </ul> */}
                         </li>
                         <li className="nav-item"><Link className="nav-link px-lg-3 py-3 py-lg-4" to="index.html">GIỚI THIỆU</Link></li>
-                        {/* <li className="nav-item"><Link className="nav-link px-lg-3 py-3 py-lg-4" to="about.html">LIÊN HỆ</Link></li> */}
                         <li className="nav-item">
                             {loggedIn ? (
                                 <div className="user-avatar">
                                     <img className="user-avatar-df" src={avatar} alt="User"  onClick={() => setMenuOpen(!isMenuOpen)}/>
                                     {isMenuOpen && (
                                         <div className="menu-open">
+                                            {userRole.includes('ROLE_ADMIN') && 
+                                                <div className="admin-page">
+                                                    <button onClick={admin}>ADMIN</button>
+                                                </div>
+                                            }
                                             <div className="profile">
                                                 <button onClick={profile}>Hồ sơ cá nhân</button>
                                             </div>

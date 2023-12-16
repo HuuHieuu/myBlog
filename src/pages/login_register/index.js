@@ -101,7 +101,8 @@ function LoginRegister() {
         passwordHash: password,
         firstName: firstName,
         lastName: lastName,
-        phoneNumber: phoneNumber,
+        mobile: phoneNumber,
+        email: email,
       });
 
       const token = response.data;
@@ -123,9 +124,9 @@ function LoginRegister() {
             <h1>{isSignUp ? 'Tạo tài khoản mới' : 'Đăng Nhập'}</h1>
             {isSignUp && 
                 <>
-                    <input type="text" placeholder="First Name" value={firstName} onChange={handleFirstNameChange} />
-                    <input type="text" placeholder="Last Name" value={lastName} onChange={handleLastNameChange} />
-                    <input type="text" placeholder="Phone Number" value={phoneNumber} onChange={handlePhoneNumberChange} />
+                    <input type="firstname" placeholder="First Name" value={firstName} onChange={handleFirstNameChange} />
+                    <input type="lastname" placeholder="Last Name" value={lastName} onChange={handleLastNameChange} />
+                    <input type="mobile" placeholder="Phone Number" value={phoneNumber} onChange={handlePhoneNumberChange} />
                     <input type="email" placeholder="Email" value={email} onChange={handleEmailChange} />
                 </>
             }

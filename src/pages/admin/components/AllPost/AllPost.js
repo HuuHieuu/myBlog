@@ -1,12 +1,38 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import './AllPost.css'
 import MyEditor from '../../../../components/MyEditor';
+import axios from 'axios';
+
 function AllPost() {
     const [showEditor, setShowEditor] = useState(false);
+    const [posts,setPosts] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const handleCloseEditor = () => {
+        setShowEditor(false);
+    };
+
+    useEffect(() => {
+    // Gửi yêu cầu GET đến API Endpoint /admin khi component được mount
+    axios.get('http://localhost:8080/api/blog/posts')
+        .then(response => {
+        // Nếu yêu cầu thành công, cập nhật state với danh sách người dùng từ server
+        setPosts(response.data);
+        setLoading(false);
+        })
+        .catch(error => {
+        console.error('Lỗi khi lấy danh sách người dùng:', error.message);
+        setLoading(false);
+        });    
+    }, []); 
+    const click =() =>{
+        console.log(posts);
+
+    }
+
     return ( 
         <>
             <div className='post-container'>
@@ -19,7 +45,7 @@ function AllPost() {
                         </div>
                         <div className='btn-content'>
                             <div class="table-buttons">
-                                <a href="#" class="btn warning-btn small-btn">
+                                <a href="#" class="btn warning-btn small-btn" onClick={click}>
                                     <FontAwesomeIcon icon={faTrashAlt}/>
                                     Trash
                                 </a>
@@ -35,7 +61,7 @@ function AllPost() {
                                             <FontAwesomeIcon icon={faTimes} />
                                         </button>
                                     </div>
-                                    <MyEditor/>
+                                    <MyEditor handleCloseEditor={handleCloseEditor}/>
                                 </div>)}
 
                     </div>
@@ -43,59 +69,37 @@ function AllPost() {
                         <table style={{border:'1px solid', width:'75%'}}>
                             <thead style={{border:'1px solid'}}>
                                 <th>STT</th>
-                                <th>Author</th>
+                                <th>AuthorID</th>
                                 <th>Title</th>
-                                <th>Topic</th>
-                                <th>Views</th>
+                                <th>Summary</th>
                                 <th>Publish</th>
                             </thead>
                             <tbody>
-                                <tr className='border-tr'>
-                                    <td>1</td>
-                                    <td>Awa Melvine</td>
+                            {posts.map((post, index) => (
+                                <tr key={index} className='border-tr'>
+                                    <td>{index + 1}</td>
+                                    <td>{post.author && post.author.firstName}</td>
                                     <td>
-                                        <a href="#" target="_blank">
-                                        This is the first post
-                                        </a>
-                                        <div class="td-action-links">
-                                        <a href="#" class="trash">Trash</a>
-                                        <span class="inline-divider">|</span>
-                                        <a href="#" class="edit">Edit</a>
-                                        <span class="inline-divider">|</span>
-                                        <a href="#" class="edit">Related Posts</a>
-                                        </div>
+                                    <a href={post.link} target="_blank">
+                                        {post.title}
+                                    </a>
+                                    <div className="td-action-links">
+                                        <a href="#" className="trash">Trash</a>
+                                        <span className="inline-divider">|</span>
+                                        <a href="#" className="edit">Edit</a>
+                                        <span className="inline-divider">|</span>
+                                        <a href="#" className="edit">Related Posts</a>
+                                    </div>
                                     </td>
-                                    <td>Self-Help</td>
-                                    <td>1,000</td>
+                                    
+                                    <td>{post.summary}</td> 
                                     <td>
-                                        <a href="#">
-                                        Publish
-                                        </a>
-                                    </td>
-                                </tr>
-                                <tr className='border-tr'>
-                                    <td>2</td>
-                                    <td>Awa</td>
-                                    <td>
-                                        <a href="#" target="_blank">
-                                        This is the second post
-                                        </a>
-                                        <div class="td-action-links">
-                                        <a href="#" class="trash">Trash</a>
-                                        <span class="inline-divider">|</span>
-                                        <a href="#" class="edit">Edit</a>
-                                        <span class="inline-divider">|</span>
-                                        <a href="#" class="edit">Related Posts</a>
-                                        </div>
-                                    </td>
-                                    <td>Self-Help</td>
-                                    <td>3,000</td>
-                                    <td>
-                                        <a href="#">
-                                        Unpublish
+                                        <a href={post.publishLink}>
+                                            {post.published ? 'Publish' : 'Unpublish'}
                                         </a>
                                     </td>
                                 </tr>
+                            ))}
                             </tbody>
                             <tfoot>
                                 <td colspan="6">

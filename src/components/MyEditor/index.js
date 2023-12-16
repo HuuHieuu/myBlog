@@ -7,7 +7,7 @@ import './MyEditor.css';
 
 const API_URL = "http://127.0.0.1:8080/api/blog/image/upload";
 
-export default function MyEditor({ ...props }) {
+export default function MyEditor({handleCloseEditor, ...props }) {
   const [editorData, setEditorData] = useState("");
   const [title, setTitle] = useState("");
   const [summary, setSummary] = useState("");
@@ -40,6 +40,11 @@ export default function MyEditor({ ...props }) {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    const token = localStorage.getItem('accessToken');
+    const headers = {
+      "Content-Type": "application/json",
+      "Authorization" : `Bearer ${token}`,
+    }
     const blogPost = {
       title,
       summary,
@@ -57,13 +62,10 @@ export default function MyEditor({ ...props }) {
     };
     try {
       console.log('Blog Post Data:', blogPost);
-      const headers = {
-        "Content-Type": "application/json",
-        "Authorization" : "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJodXlsM3F1YW5nIiwicm9sZXMiOlsiUk9MRV9BRE1JTiJdLCJpYXQiOjE3MDE1ODY4MjcsImV4cCI6MTcwMTU5MDQyN30.FFePfyzGP_VHyvSG355Kxaw194XrsqEhPRGZeGirLU8"
-      }
       console.log('Headers:', headers);
       await axios.post('http://localhost:8080/api/blog/posts', blogPost, {headers});
       alert('Blog post submitted successfully!');
+      handleCloseEditor();
     } catch (error) {
       console.error('Error submitting blog post:', error);
     }
@@ -76,9 +78,15 @@ export default function MyEditor({ ...props }) {
                 const body = new FormData();
                 loader.file.then((file) => {
                     body.append("image", file);
+
+                    //token
+                    const token = localStorage.getItem('accessToken');
                     fetch(`${API_URL}`, {
                         method: "post",
-                        body: body
+                        body: body,
+                        headers: {
+                          'Authorization': `Bearer ${token}`,  // Thêm token vào header
+                        },
                     })
                     .then((res) => res.text())
                     .then((res) => {
