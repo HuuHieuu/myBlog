@@ -9,6 +9,7 @@ import Login from './pages/login/login';
 import SignUp from './pages/signup/SignUp';
 import NewPostEditor from './pages/newPost';
 import Admin from './pages/admin/admin';
+import LoginRegister from './pages/login_register/index'
 
 
 const App = () => {
@@ -20,7 +21,7 @@ const App = () => {
           <Route path='/onepost' element={<Post/>}/>
           <Route path='/allposts' element={<AllPost/>}/>
           <Route path='/author' element={<Author/>}/>
-          <Route path='/login' element={<Login/>}/>
+          <Route path='/login' element={<LoginRegister/>}/>
           <Route path='/signup' element={<SignUp/>}/>
           <Route path='new-post' element={<NewPostEditor/>}/>
           <Route path='/admin' element={<Admin/>}/>

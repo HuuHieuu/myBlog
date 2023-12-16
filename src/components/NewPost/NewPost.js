@@ -3,16 +3,16 @@ import React, {useState} from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { Link, useNavigate } from 'react-router-dom';
-import { useUserContext } from '../Context/UserContext';
+import {isAuthenticated} from '../../utils/auth'
 import MyEditor from '../MyEditor';
 import './NewPost.css'
 function NewPost() {
     const navigate = useNavigate();
-    const { isLoggedIn } = useUserContext();
+    const [loggedIn, setLoggedIn] = useState(isAuthenticated());
     const [modalIsOpen, setModalIsOpen] = useState(false);
 
     const handleNewPostClick = () => {
-        if (isLoggedIn) {
+        if (loggedIn) {
           // Người dùng đăng nhập, chuyển hướng đến trang tạo bài viết mới
           navigate('/admin');
         }

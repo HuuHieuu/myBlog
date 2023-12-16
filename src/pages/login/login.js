@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import React, { useState } from 'react';
 import Nav from '../../components/nav/Nav';
 import './login.css'; 
+import axios from 'axios';
 import avatar from '../../assets/image/background/avatar.jpg'
 const LoginForm = () => {
   const navigate  = useNavigate()
@@ -21,18 +22,31 @@ const LoginForm = () => {
     setErrorMessage('');
   };
 
-  const handleLogin = () => {
-    // Xử lý logic đăng nhập ở đây
-    if(username == "" || password ==""){
-      setErrorMessage('Vui lòng nhập đầy đủ tên tài khoản và mật khẩu.');
-    }else if( username == "hieu" && password == "1"){
-      console.log(`Đăng nhập với tên người dùng: ${username} và mật khẩu: ${password}`);
-      login({ username, avatar: {avatar} });
-      navigate('/')
-    }else{
-      setErrorMessage('Tên tài khoản hoặc mật khẩu không đúng.');
+  const handleLogin = async () => {
+    try {
+      const response = await axios.post('http://localhost:8080/api/blog/users/login', {
+        username: username,
+        passwordHash: password,
+      });
+
+      // Lấy token từ response
+      const token = response.data;
+
+      // Lưu token vào localStorage hoặc Redux state
+      localStorage.setItem('accessToken', token);
+
+      // Gửi token trong các yêu cầu tiếp theo (nếu cần)
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      console.log(token);
+
+      // Điều hướng hoặc thực hiện các hành động khác sau khi đăng nhập thành công
+      navigate('/');
+    } catch (error) {
+      console.error('Đăng nhập thất bại:', error.message);
+      // Xử lý lỗi đăng nhập
     }
   };
+  
 
   return (
     <div className='flex-container'>

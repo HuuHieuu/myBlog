@@ -2,13 +2,20 @@ import { useUserContext } from "./Context/UserContext";
 import React, { useState, useEffect,  } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {FaSearch} from 'react-icons/fa';
+import {isAuthenticated} from '../utils/auth'
 import './NavBar.css';
 import avatar from '../assets/image/avatar1.jpeg'
 
 function Navbar() {
-    const { isLoggedIn, user, logout } = useUserContext();
+    const [loggedIn, setLoggedIn] = useState(isAuthenticated());
     const [isMenuOpen, setMenuOpen] = useState(false);
     const navigate = useNavigate();
+    const handleLogout = () => {
+        // Xóa token khi đăng xuất
+        localStorage.removeItem('accessToken');
+        setLoggedIn(false);
+        // Thực hiện các bước khác sau khi đăng xuất (ví dụ: chuyển hướng)
+      };
     const handleClick = () => {
         // Thực hiện chuyển hướng đến '/onepost'
         navigate('/onepost');
@@ -109,7 +116,7 @@ function Navbar() {
                         <li className="nav-item"><Link className="nav-link px-lg-3 py-3 py-lg-4" to="index.html">GIỚI THIỆU</Link></li>
                         {/* <li className="nav-item"><Link className="nav-link px-lg-3 py-3 py-lg-4" to="about.html">LIÊN HỆ</Link></li> */}
                         <li className="nav-item">
-                            {isLoggedIn ? (
+                            {loggedIn ? (
                                 <div className="user-avatar">
                                     <img className="user-avatar-df" src={avatar} alt="User"  onClick={() => setMenuOpen(!isMenuOpen)}/>
                                     {isMenuOpen && (
@@ -118,7 +125,7 @@ function Navbar() {
                                                 <button onClick={profile}>Hồ sơ cá nhân</button>
                                             </div>
                                             <div className="logout-menu">
-                                                <button onClick={logout}>Đăng xuất</button>
+                                                <button onClick={handleLogout}>Đăng xuất</button>
                                             </div>
                                         </div>
                                     )}

@@ -56,7 +56,13 @@ export default function MyEditor({ ...props }) {
       publishedAt: published ? new Date().toISOString() : null,
     };
     try {
-      await axios.post('http://localhost:8080/api/blog/posts', blogPost);
+      console.log('Blog Post Data:', blogPost);
+      const headers = {
+        "Content-Type": "application/json",
+        "Authorization" : "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJodXlsM3F1YW5nIiwicm9sZXMiOlsiUk9MRV9BRE1JTiJdLCJpYXQiOjE3MDE1ODY4MjcsImV4cCI6MTcwMTU5MDQyN30.FFePfyzGP_VHyvSG355Kxaw194XrsqEhPRGZeGirLU8"
+      }
+      console.log('Headers:', headers);
+      await axios.post('http://localhost:8080/api/blog/posts', blogPost, {headers});
       alert('Blog post submitted successfully!');
     } catch (error) {
       console.error('Error submitting blog post:', error);
