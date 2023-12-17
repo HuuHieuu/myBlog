@@ -11,9 +11,42 @@ function AllPost() {
     const [showEditor, setShowEditor] = useState(false);
     const [posts,setPosts] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [selectedPost, setSelectedPost] = useState(null);
+    const [page, setPage] = useState(1); // Trang hiện tại
+    const pageSize = 5 // kích thước trang
+    
     const handleCloseEditor = () => {
         setShowEditor(false);
     };
+    const handlePostSubmitted = async () => {
+        // Lấy danh sách bài viết đã cập nhật
+        try {
+          const response = await axios.get('http://localhost:8080/api/blog/posts');
+          // Cập nhật trạng thái với dữ liệu mới
+          setPosts(response.data);
+        } catch (error) {
+          console.error('Lỗi khi lấy danh sách bài viết đã cập nhật:', error.message);
+        }
+    };
+
+    const handleEditClick = (post) => {
+        // Lưu bài viết được chọn vào trạng thái và hiển thị trình soạn thảo
+        setSelectedPost(post);
+        setShowEditor(true);
+        console.log(post);
+      };
+
+    const handleDeletePost = async (postId) =>{
+        try {
+            const response = await axios.delete(`http://localhost:8080/api/blog/posts/${postId}`);
+            console.log(response.data); // Hiển thị thông báo xóa thành công hoặc lỗi
+            // Cập nhật danh sách bài viết sau khi xóa
+            handlePostSubmitted();
+        } catch (error) {
+            console.error('Lỗi khi xóa bài viết:', error.message);
+        }
+    }
+    
 
     useEffect(() => {
     // Gửi yêu cầu GET đến API Endpoint /admin khi component được mount
@@ -28,10 +61,18 @@ function AllPost() {
         setLoading(false);
         });    
     }, []); 
-    const click =() =>{
-        console.log(posts);
 
+    const startIndex = (page - 1) * pageSize;
+    const endIndex = startIndex + pageSize;
+
+    // Lấy các người dùng cho trang hiện tại từ toàn bộ danh sách
+    const postsForCurrentPage = posts.slice(startIndex, endIndex);
+    const totalPageCount = Math.ceil(posts.length / pageSize);
+
+    const click = ()=>{
+        console.log(posts);
     }
+
 
     return ( 
         <>
@@ -61,7 +102,7 @@ function AllPost() {
                                             <FontAwesomeIcon icon={faTimes} />
                                         </button>
                                     </div>
-                                    <MyEditor handleCloseEditor={handleCloseEditor}/>
+                                    <MyEditor handleCloseEditor={handleCloseEditor} onPostSubmitted={handlePostSubmitted} selectedPost={selectedPost}/>
                                 </div>)}
 
                     </div>
@@ -72,12 +113,13 @@ function AllPost() {
                                 <th>AuthorID</th>
                                 <th>Title</th>
                                 <th>Summary</th>
+                                <th>View</th>
                                 <th>Publish</th>
                             </thead>
                             <tbody>
-                            {posts.map((post, index) => (
-                                <tr key={index} className='border-tr'>
-                                    <td>{index + 1}</td>
+                            {postsForCurrentPage.map((post, index) => (
+                                <tr key={startIndex+index} className='border-tr'>
+                                    <td>{startIndex+index + 1}</td>
                                     <td>{post.author && post.author.firstName}</td>
                                     <td>
                                     <a href={post.link} target="_blank">
@@ -86,13 +128,14 @@ function AllPost() {
                                     <div className="td-action-links">
                                         <a href="#" className="trash">Trash</a>
                                         <span className="inline-divider">|</span>
-                                        <a href="#" className="edit">Edit</a>
+                                        <a href="#" className="edit" onClick={()=>handleEditClick(post)}>Edit</a>
                                         <span className="inline-divider">|</span>
                                         <a href="#" className="edit">Related Posts</a>
                                     </div>
                                     </td>
                                     
                                     <td>{post.summary}</td> 
+                                    <td>{post.views}</td>
                                     <td>
                                         <a href={post.publishLink}>
                                             {post.published ? 'Publish' : 'Unpublish'}
@@ -103,15 +146,18 @@ function AllPost() {
                             </tbody>
                             <tfoot>
                                 <td colspan="6">
-                                <div class="pagination-links">
-                                    <a href="#" class="link active">1</a>
-                                    <a href="#" class="link">2</a>
-                                    <a href="#" class="link">3</a>
-                                    <a href="#" class="link">4</a>
-                                    <a href="#" class="link">5</a>
-                                    <a href="#" class="link">6</a>
-                                    <a href="#" class="link">7</a>
-                                </div>
+                                    <div className="pagination-links">
+                                        {[...Array(totalPageCount).keys()].map(num => (
+                                        <a
+                                            key={num + 1}
+                                            href={`#${num + 1}`}
+                                            className={num + 1 === page ? "link active" : "link"}
+                                            onClick={() => setPage(num + 1)}
+                                        >
+                                            {num + 1}
+                                        </a>
+                                        ))}
+                                    </div>
                                 </td>
                             </tfoot>
                         </table>

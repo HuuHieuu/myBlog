@@ -1,13 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import axios from 'axios';
-import './MyEditor';
 import './MyEditor.css';
 
 const API_URL = "http://127.0.0.1:8080/api/blog/image/upload";
 
-export default function MyEditor({handleCloseEditor, ...props }) {
+export default function MyEditor({ handleCloseEditor,onPostSubmitted,selectedPost, ...props }) {
   const [editorData, setEditorData] = useState("");
   const [title, setTitle] = useState("");
   const [summary, setSummary] = useState("");
@@ -15,9 +14,32 @@ export default function MyEditor({handleCloseEditor, ...props }) {
   const [slug, setSlug] = useState("");
   const [published, setPublished] = useState(false);
   const [thumbnail, setThumbnail] = useState("");
-  const [authorId] = useState(1);
+  const [authorId, setAuthorId] = useState(null);
   const [parentId, setParentId] = useState(null);
   const [categoryIds, setCategoryIds] = useState([]);
+  const [body, setBody] = useState("");
+
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      try {
+        const token = localStorage.getItem('accessToken');
+        const response = await axios.get('http://localhost:8080/api/blog/users/info', {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+
+        const userData = response.data;
+        setAuthorId(userData.id);
+      } catch (error) {
+        console.error('Error fetching user info:', error);
+      }
+    };
+
+    fetchUserInfo();
+  }, []);
+
+  
 
   const handleEditorChange = (data) => {
     const imgRegex = /<img.*?src="(.*?)"/g;
@@ -36,7 +58,25 @@ export default function MyEditor({handleCloseEditor, ...props }) {
     });
 
     setEditorData(data);
+    setBody(data)
   };
+
+  useEffect(() => {
+    // Nếu có bài viết được chọn, sử dụng nó để cập nhật trạng thái của trình soạn thảo
+    if (selectedPost) {
+      console.log("MyEditor - Selected Post:", selectedPost);
+      setBody(selectedPost.content);
+      setTitle(selectedPost.title);
+      setSummary(selectedPost.summary);
+      setMetaTitle(selectedPost.metaTitle);
+      setSlug(selectedPost.slug);
+      setPublished(selectedPost.published);
+      setThumbnail(selectedPost.thumbnail);
+      setAuthorId(selectedPost.authorId);
+      setParentId(selectedPost.parentId);
+      setCategoryIds(selectedPost.categoryIds);
+    }
+  }, [selectedPost]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -44,7 +84,8 @@ export default function MyEditor({handleCloseEditor, ...props }) {
     const headers = {
       "Content-Type": "application/json",
       "Authorization" : `Bearer ${token}`,
-    }
+    };
+
     const blogPost = {
       title,
       summary,
@@ -60,16 +101,27 @@ export default function MyEditor({handleCloseEditor, ...props }) {
       updatedAt: new Date().toISOString(),
       publishedAt: published ? new Date().toISOString() : null,
     };
+    console.log(blogPost);
     try {
-      console.log('Blog Post Data:', blogPost);
-      console.log('Headers:', headers);
-      await axios.post('http://localhost:8080/api/blog/posts', blogPost, {headers});
+      if (selectedPost) {
+        // Nếu có bài viết được chọn, thực hiện logic chỉnh sửa
+        await axios.put(`http://localhost:8080/api/blog/posts/${selectedPost.id}`, blogPost, { headers });
+      } else {
+        // Nếu không có bài viết được chọn, thực hiện logic tạo mới
+        await axios.post('http://localhost:8080/api/blog/posts', blogPost, { headers });
+      }
       alert('Blog post submitted successfully!');
+
+      //hàm callback từ allpost
+      onPostSubmitted();
+
+      // close editor
       handleCloseEditor();
     } catch (error) {
       console.error('Error submitting blog post:', error);
     }
   };
+
 
   function uploadAdapter(loader) {
     return {
@@ -158,6 +210,7 @@ export default function MyEditor({handleCloseEditor, ...props }) {
             onChange={(event, editor) => {
                 handleEditorChange(editor.getData());
             }}
+            data={body}
             {...props}
         />
         <button type="submit" className="submit-button">Submit</button>

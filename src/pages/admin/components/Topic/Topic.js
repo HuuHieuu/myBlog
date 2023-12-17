@@ -1,7 +1,10 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { useState, useEffect } from 'react';
 import '../AllPost/AllPost.css'
 function Topic() {
+    const [categories,setCategories] = useState([]);
+    
     return (
         <>
              <div className='post-container'>

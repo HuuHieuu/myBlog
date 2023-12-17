@@ -1,7 +1,27 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import '../AllPost/AllPost.css'
+import { useState,useEffect } from 'react';
+import axios from 'axios';
 function Role() {
+    const [roles, setRoles] = useState([]);
+
+    useEffect(() => {
+        // Gửi yêu cầu GET đến API Endpoint /admin khi component được mount
+        axios.get('http://localhost:8080/api/blog/admin/role')
+            .then(response => {
+            // Nếu yêu cầu thành công, cập nhật state với danh sách người dùng từ server
+            setRoles(response.data);
+            })
+            .catch(error => {
+            console.error('Lỗi khi lấy danh sách role', error.message);
+            });    
+        }, []); 
+
+    const click = ()=>{
+        console.log(roles);
+    }
+
     return ( 
         <>
             <div className='post-container'>
@@ -11,7 +31,7 @@ function Role() {
                     <div className='btn-func'>
                         <div className='btn-content'>
                             <div class="table-buttons">
-                                <a href="#" class="btn primary-btn small-btn">
+                                <a href="#" class="btn primary-btn small-btn" onClick={click}>
                                     <FontAwesomeIcon icon={faPlus}/>
                                     Add Role
                                 </a>
@@ -23,55 +43,18 @@ function Role() {
                             <thead style={{border:'1px solid'}}>
                                 <th>STT</th>
                                 <th>Role</th>
-                                <th># of users</th>
-                                <th>Update Permissions</th>
+                                <th>Name</th>
+                                <th>Username</th>
                             </thead>
                             <tbody>
-                            <tr className='border-tr'>
-                                <td>1</td>
-                                <td>
-                                    Admin
-                                    <div class="td-action-links">
-                                    <a href="#" class="trash">Trash</a>
-                                    <span class="inline-divider">|</span>
-                                    <a href="#" class="edit">Edit</a>
-                                    </div>
-                                </td>
-                                <td>5</td>
-                                <td class="center">
-                                    <a href="#" class="edit" title="Assign permissions to role">Permissions</a>
-                                </td>
-                            </tr>
-                            <tr className='border-tr'>
-                            <td>2</td>
-                            <td>
-                                Author
-                                <div class="td-action-links">
-                                <a href="#" class="trash">Trash</a>
-                                <span class="inline-divider">|</span>
-                                <a href="#" class="edit">Edit</a>
-                                </div>
-                            </td>
-                            <td>5</td>
-                            <td class="center">
-                                <a href="#" class="edit" title="Assign permissions to role">Permissions</a>
-                            </td>
-                            </tr>
-                            <tr className='border-tr'>
-                            <td>3</td>
-                            <td>
-                                Editor
-                                <div class="td-action-links">
-                                <a href="#" class="trash">Trash</a>
-                                <span class="inline-divider">|</span>
-                                <a href="#" class="edit">Edit</a>
-                                </div>
-                            </td>
-                            <td>5</td>
-                            <td class="center">
-                                <a href="#" class="edit" title="Assign permissions to role">Permissions</a>
-                            </td>
-                            </tr>
+                                {roles.map((role,index)=>(
+                                    <tr key={index} className='border-tr'>
+                                        <td>{index+1}</td>
+                                        <td>{role.role}</td>
+                                        <td>{role.user && role.user.firstName}</td>
+                                        <td>{role.user && role.user.username}</td>
+                                    </tr>
+                                ))}
                             </tbody>
                         </table>
                     </div>
