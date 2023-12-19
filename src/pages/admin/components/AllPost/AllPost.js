@@ -6,15 +6,22 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import './AllPost.css'
 import MyEditor from '../../../../components/MyEditor';
 import axios from 'axios';
+import Topic from '../Topic/Topic';
 
 function AllPost() {
     const [showEditor, setShowEditor] = useState(false);
     const [posts,setPosts] = useState([]);
-    const [loading, setLoading] = useState(true);
     const [selectedPost, setSelectedPost] = useState(null);
+    const [selectPosts, setSelectPosts] = useState(null);
     const [page, setPage] = useState(1); // Trang hiện tại
     const pageSize = 5 // kích thước trang
+    const [searchTerm, setSearchTerm] = useState('');
+    const [showSearchOptions, setShowSearchOptions] = useState(false);
+    const [authorId, setAuthorId] = useState('');
+    const [categoryId, setCategoryId] = useState('');
+    const [searchResults, setSearchResults] = useState(null);
     
+   
     const handleCloseEditor = () => {
         setShowEditor(false);
     };
@@ -36,31 +43,41 @@ function AllPost() {
         console.log(post);
       };
 
-    const handleDeletePost = async (postId) =>{
+    const handleDeleteClick = async (postId) => {
+        const confirmed = window.confirm("Bạn có chắc chắn muốn xóa bài viết này?");
+        if (!confirmed) {
+            return;
+        }
+    
         try {
-            const response = await axios.delete(`http://localhost:8080/api/blog/posts/${postId}`);
-            console.log(response.data); // Hiển thị thông báo xóa thành công hoặc lỗi
-            // Cập nhật danh sách bài viết sau khi xóa
-            handlePostSubmitted();
+            const token = localStorage.getItem('accessToken');
+            const headers = {
+                "Authorization": `Bearer ${token}`,
+            };
+    
+            await axios.delete(`http://localhost:8080/api/blog/posts?postid=${postId}`, { headers });
+            alert(`Đã xóa bài viết id ${postId}`);
+            // Refresh danh sách bài viết sau khi xóa
+            const response = await axios.get('http://localhost:8080/api/blog/posts');
+            setPosts(response.data);
         } catch (error) {
             console.error('Lỗi khi xóa bài viết:', error.message);
         }
-    }
-    
+    };
 
     useEffect(() => {
-    // Gửi yêu cầu GET đến API Endpoint /admin khi component được mount
-    axios.get('http://localhost:8080/api/blog/posts')
-        .then(response => {
-        // Nếu yêu cầu thành công, cập nhật state với danh sách người dùng từ server
-        setPosts(response.data);
-        setLoading(false);
-        })
-        .catch(error => {
-        console.error('Lỗi khi lấy danh sách người dùng:', error.message);
-        setLoading(false);
-        });    
-    }, []); 
+        const fetchData = async () => {
+            try {
+                const response = await axios.get('http://localhost:8080/api/blog/posts');
+                setPosts(response.data);
+            } catch (error) {
+                console.error('Error fetching data:', error.message);
+            }
+        };
+    
+        fetchData();
+    }, []);
+    
 
     const startIndex = (page - 1) * pageSize;
     const endIndex = startIndex + pageSize;
@@ -72,17 +89,90 @@ function AllPost() {
     const click = ()=>{
         console.log(posts);
     }
+    const handleSearchButtonClick = () => {
+        setShowSearchOptions(!showSearchOptions);
+      };
 
+    const handleSearch = () => {
+
+        axios.get(`http://localhost:8080/api/blog/posts/keyword/${searchTerm}`)
+      .then(response => {
+        setSearchResults(response.data);
+      })
+      .catch(error => {
+        console.error('Error fetching user by ID:', error.message);
+        setSearchResults(null);
+      });
+      console.log('Selected Post:', selectPosts);
+    };
+
+    const handleSearchByCategory = () => {
+        axios.get(`http://localhost:8080/api/blog/posts/category/${categoryId}`)
+          .then(response => {
+            setSearchResults(response.data);
+          })
+          .catch(error => {
+            console.error('Error fetching posts by category:', error.message);
+            setSearchResults([]);
+          });
+      };
+    
+      const handleSearchByAuthor = () => {
+        axios.get(`http://localhost:8080/api/blog/posts/author/${authorId}`)
+          .then(response => {
+            setSearchResults(response.data);
+          })
+          .catch(error => {
+            console.error('Error fetching posts by author:', error.message);
+            setSearchResults([]);
+          });
+      };
 
     return ( 
         <>
+        <div hidden={true}>
+            <Topic categoryIds={categoryId} />
+        </div>
             <div className='post-container'>
                 <div className='post-content'>
                     <h3>Posts</h3>
                     <hr></hr>
                     <div className='btn-func'>
                         <div className='table-action'>
-                            <input type="text" name="search-term" id="search-post-input" placeholder="Search..."/>
+                        <button onClick={handleSearchButtonClick}
+                            className='search-css-btn'
+                        >
+                            Search
+                        </button>
+                        {showSearchOptions && (
+                            <div>
+                                {/* keyword */}
+                            <input type="text" name="search-term" id="search-post-input" placeholder="Search..." value={searchTerm} onChange={(e)=>setSearchTerm(e.target.value)} />
+                            <button
+                                style={{margin:'0', width:'7%',backgroundColor:'transparent', color:'black',opacity:'1'}}
+                                onClick={handleSearch}
+                                onMouseOver={(e) => e.target.style.opacity = '0.7'} // Hover effect
+                                onMouseOut={(e) => e.target.style.opacity = '1'}
+                                >Search</button>
+                            {/* author */}
+                            <input type="text" name="search-by-author" id="search-post-input" placeholder="Search by authorId..." value={authorId} onChange={(e)=>setAuthorId(e.target.value)} />
+                            <button
+                                style={{margin:'0', width:'7%',backgroundColor:'transparent', color:'black',opacity:'1'}}
+                                onClick={handleSearchByAuthor}
+                                onMouseOver={(e) => e.target.style.opacity = '0.7'} // Hover effect
+                                onMouseOut={(e) => e.target.style.opacity = '1'}
+                                >Search</button>
+                            {/* category */}
+                            <input type="text" name="search-by-category" id="search-post-input" placeholder="Search by categoryId..." value={categoryId} onChange={(e)=>setCategoryId(e.target.value)} />
+                            <button
+                                style={{margin:'0', width:'7%',backgroundColor:'transparent', color:'black',opacity:'1'}}
+                                onClick={handleSearchByCategory}
+                                onMouseOver={(e) => e.target.style.opacity = '0.7'} // Hover effect
+                                onMouseOut={(e) => e.target.style.opacity = '1'}
+                                >Search</button>
+                            </div>
+                        )}
+                            
                         </div>
                         <div className='btn-content'>
                             <div class="table-buttons">
@@ -96,7 +186,8 @@ function AllPost() {
                                 </a>
                             </div>
                         </div>
-                                {showEditor && (<div className='popup'>
+                                {showEditor && (
+                                <div className='popup'>
                                     <div style={{textAlign:'left', marginLeft:'2%', marginBottom:'1%'}}>
                                         <button className="close-button" onClick={() => setShowEditor(false)}>
                                             <FontAwesomeIcon icon={faTimes} />
@@ -106,10 +197,43 @@ function AllPost() {
                                 </div>)}
 
                     </div>
+                    {/* search by keyword */}
+                    {searchResults ? (
+                        <div className="table-post">
+                            <table style={{ border: '1px solid', width: '75%' }}>
+                                <thead>
+                                    <tr>
+                                        <th>PostId</th>
+                                        <th>AuthorID</th>
+                                        <th>Title</th>
+                                        <th>Summary</th>
+                                        <th>View</th>
+                                        <th>Publish</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {searchResults.map((post, index) => (
+                                    <tr key={index}>
+                                        <td>{post.id}</td>
+                                        <td>{post.author && post.author.firstName ? post.author.id : post.author}</td>
+                                        <td>{post.title}</td>
+                                        <td>{post.summary}</td>
+                                        <td>{post.views}</td>
+                                        <td>
+                                        <a href={post.publishLink}>
+                                            {post.published ? 'Publish' : 'Unpublish'}
+                                        </a>
+                                        </td>
+                                    </tr>
+                                ))}
+                                </tbody>
+                        </table>
+                        </div>
+                    ): (
                     <div className='table-post'>
                         <table style={{border:'1px solid', width:'75%'}}>
                             <thead style={{border:'1px solid'}}>
-                                <th>STT</th>
+                                <th>PostId</th>
                                 <th>AuthorID</th>
                                 <th>Title</th>
                                 <th>Summary</th>
@@ -119,18 +243,17 @@ function AllPost() {
                             <tbody>
                             {postsForCurrentPage.map((post, index) => (
                                 <tr key={startIndex+index} className='border-tr'>
-                                    <td>{startIndex+index + 1}</td>
-                                    <td>{post.author && post.author.firstName}</td>
+                                    <td>{post.id}</td>
+                                    {/* <td>{post.author && post.author.firstName}</td> */}
+                                    <td>{post.author && post.author.firstName ? post.author.id : post.author}</td>
                                     <td>
                                     <a href={post.link} target="_blank">
                                         {post.title}
                                     </a>
                                     <div className="td-action-links">
-                                        <a href="#" className="trash">Trash</a>
+                                        <a href="#" className="trash" onClick={()=>handleDeleteClick(post.id)}>Trash</a>
                                         <span className="inline-divider">|</span>
                                         <a href="#" className="edit" onClick={()=>handleEditClick(post)}>Edit</a>
-                                        <span className="inline-divider">|</span>
-                                        <a href="#" className="edit">Related Posts</a>
                                     </div>
                                     </td>
                                     
@@ -162,6 +285,7 @@ function AllPost() {
                             </tfoot>
                         </table>
                     </div>
+                    )}
                 </div>
             </div>
         </>

@@ -110,3 +110,29 @@
 .post-container .post-content .popup .close-button:hover{
     opacity: 0.6;
 }
+
+
+/* user */
+.post-container .post-content .popup .flex-user-container{
+    display: flex;
+    width: 99%;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.post-container .post-content .popup .flex-user-container .flex-user-content{
+    margin: 10px 0;
+    width: 30%;
+}
+
+
+.post-container .post-content .btn-func .table-action .search-css-btn{
+    background-color: transparent;
+    color: black;
+    opacity: 1;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.post-container .post-content .btn-func .table-action .search-css-btn:hover{
+    opacity: 0.5;
+}

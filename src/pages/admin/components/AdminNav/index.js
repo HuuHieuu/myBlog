@@ -25,6 +25,10 @@ function AdminNav() {
         navigate('/profile')
     }
 
+    const handleLogout =() =>{
+        localStorage.removeItem('accessToken')
+    }
+
 
     return (
         <>
@@ -38,7 +42,7 @@ function AdminNav() {
                 <div className="collapse navbar-collapse" id="navbarResponsive">
                     <ul className="navbar-nav ms-auto py-4 py-lg-0">
                         <li className="nav-item">
-                            <Link className="nav-link px-lg-3 py-3 py-lg-4" to="/">
+                            <Link className="nav-link px-lg-3 py-3 py-lg-4" to="/" onClick={handleLogout}>
                                 ĐĂNG XUẤT
                             </Link>
                         </li>

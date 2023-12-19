@@ -12,7 +12,6 @@ const tabItems=[
     {label: "Topics"},
     {label: "Users"},
     {label: "Roles"},
-    {label: "Permissions"},
 ]
 function Admin() {
     const [activeTab, setActiveTab] = useState(0)
@@ -56,7 +55,6 @@ function Admin() {
                     {activeTab===1 && <Topic/>}
                     {activeTab===2 && <User/>}
                     {activeTab===3 && <Role/>}
-                    {activeTab===4 && <Permission/>}
                 </div>
             </div>
         </>

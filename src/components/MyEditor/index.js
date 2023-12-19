@@ -18,6 +18,7 @@ export default function MyEditor({ handleCloseEditor,onPostSubmitted,selectedPos
   const [parentId, setParentId] = useState(null);
   const [categoryIds, setCategoryIds] = useState([]);
   const [body, setBody] = useState("");
+  const [authorName,setAuthorName]=useState();
 
   useEffect(() => {
     const fetchUserInfo = async () => {
@@ -30,7 +31,9 @@ export default function MyEditor({ handleCloseEditor,onPostSubmitted,selectedPos
         });
 
         const userData = response.data;
+        console.log(userData.firstName);
         setAuthorId(userData.id);
+        setAuthorName(userData.firstName);
       } catch (error) {
         console.error('Error fetching user info:', error);
       }
@@ -101,7 +104,7 @@ export default function MyEditor({ handleCloseEditor,onPostSubmitted,selectedPos
       updatedAt: new Date().toISOString(),
       publishedAt: published ? new Date().toISOString() : null,
     };
-    console.log(blogPost);
+    
     try {
       if (selectedPost) {
         // Nếu có bài viết được chọn, thực hiện logic chỉnh sửa
