@@ -3,21 +3,14 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import PostCard from './PostCard';
 
-export default function CardList({categoryId, displayMode}) {
+export default function CardList({categoryId, displayMode,postsByCategory}) {
   
   const [posts, setPosts] = useState([]);
   const [postByCategory, setPostByCategory] = useState([])
 
   useEffect(()=>{
-    axios.get(`http://localhost:8080/api/blog/posts/category/${categoryId}`)
-    .then(response => {
-      setPostByCategory(response.data);
-    })
-    .catch(error => {
-      console.error('Error fetching posts by category:', error.message);
-      setPostByCategory([]);
-    });
-  },[])
+    
+  },[categoryId])
 
   useEffect(() => {
     const fetchData = async () => {
@@ -40,10 +33,13 @@ export default function CardList({categoryId, displayMode}) {
   // style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '20px', padding: '20px' }}
   return (
     <div>
-      <PostCard posts={posts}/>
-      {displayMode && (
-        <PostCard posts={postByCategory}/>
-      )}
+      <div>
+        {displayMode === 'byCate' ? (
+          <PostCard posts={postsByCategory} />
+        ) : (
+          <PostCard posts={posts} />
+        )}
+  </div>
     </div>
   );
 }

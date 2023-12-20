@@ -5,7 +5,7 @@ import axios from 'axios';
 import Navbar from '../../components/Navbar';
 import CardMedia from '@mui/material/CardMedia';
 import styles from './postContent.module.scss'
-
+import { format } from 'date-fns';
 
 const PostContent = () => {
   const { postId } = useParams();
@@ -31,12 +31,20 @@ const PostContent = () => {
   return (
     <div>
       <Navbar/>
-      <div>
+      <div style={{position:'relative'}}>
         <CardMedia
           sx={{height: 600}}
           image={post.thumbnail}
         />
-        <h1 className={styles.ckH1}>{post.title}</h1>
+        <div className={styles.ckDivHeader}>
+          <h3 className={styles.ckH1}>{post.title}</h3>
+          <h1 className={styles.ckH1}>{post.metaTitle}</h1>
+          <span className={styles.ckH1}>
+            Posted by: 
+            <a> {post.author.firstName} </a>
+            on {format(new Date(post.publishedAt), 'dd/MM/yyyy HH:mm')}
+          </span>
+        </div>
         <div className={styles.ckDiv}
           style={{margin:'20px 10%', textAlign:'justify'}}
         dangerouslySetInnerHTML={{ __html: post.content }} />

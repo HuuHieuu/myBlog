@@ -1,4 +1,14 @@
  @import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300&family=Roboto:wght@300;400&display=swap');
+
+
+ .ckDivHeader{
+    text-align: center;
+    position: absolute;
+    top: 13%;
+    left: 50%;
+    transform: translateX(-50%);
+ }
+
 .ckDiv img{
     max-width: 100%; /* Ảnh sẽ không bị tràn khỏi phần tử cha */
     height: auto;
@@ -14,4 +24,6 @@
     text-align: center;
     font-family: 'Roboto', sans-serif;
     font-family: 'Roboto Slab', serif;
+    color: white;
+    font-size: 2.6rem;
 }
