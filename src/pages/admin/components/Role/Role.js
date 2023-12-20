@@ -213,8 +213,6 @@ function Role() {
                                         <td>{role.user&&role.user.id}</td>
                                         <td>{role.role}
                                             <div className="td-action-links">
-                                                <a className="trash" onClick={()=>handleDeleteClick(role.roleId)}>Trash</a>
-                                                <span className="inline-divider">|</span>
                                                 <a  className="edit" onClick={()=>handleEditClick(role)}>Edit</a>
                                             </div>
                                         </td>

@@ -39,6 +39,7 @@ function AllPost() {
     const handleEditClick = (post) => {
         // Lưu bài viết được chọn vào trạng thái và hiển thị trình soạn thảo
         setSelectedPost(post);
+        setSelectPosts(post.categories)
         setShowEditor(true);
         console.log(post);
       };
@@ -103,7 +104,7 @@ function AllPost() {
         console.error('Error fetching user by ID:', error.message);
         setSearchResults(null);
       });
-      console.log('Selected Post:', selectPosts);
+    //   console.log('Selected Post:', selectPosts);
     };
 
     const handleSearchByCategory = () => {
@@ -139,14 +140,11 @@ function AllPost() {
                     <hr></hr>
                     <div className='btn-func'>
                         <div className='table-action'>
-                        <button onClick={handleSearchButtonClick}
-                            className='search-css-btn'
-                        >
-                            Search
-                        </button>
-                        {showSearchOptions && (
-                            <div>
-                                {/* keyword */}
+                            {/* <button onClick={handleSearchButtonClick}
+                                className='search-css-btn'
+                            >
+                                Search
+                            </button> */}
                             <input type="text" name="search-term" id="search-post-input" placeholder="Search..." value={searchTerm} onChange={(e)=>setSearchTerm(e.target.value)} />
                             <button
                                 style={{margin:'0', width:'7%',backgroundColor:'transparent', color:'black',opacity:'1'}}
@@ -154,7 +152,17 @@ function AllPost() {
                                 onMouseOver={(e) => e.target.style.opacity = '0.7'} // Hover effect
                                 onMouseOut={(e) => e.target.style.opacity = '1'}
                                 >Search</button>
-                            {/* author */}
+                     {/*   {showSearchOptions && (
+                            <div>
+                                {/* keyword 
+                            <input type="text" name="search-term" id="search-post-input" placeholder="Search..." value={searchTerm} onChange={(e)=>setSearchTerm(e.target.value)} />
+                            <button
+                                style={{margin:'0', width:'7%',backgroundColor:'transparent', color:'black',opacity:'1'}}
+                                onClick={handleSearch}
+                                onMouseOver={(e) => e.target.style.opacity = '0.7'} // Hover effect
+                                onMouseOut={(e) => e.target.style.opacity = '1'}
+                                >Search</button>
+                            {/* author 
                             <input type="text" name="search-by-author" id="search-post-input" placeholder="Search by authorId..." value={authorId} onChange={(e)=>setAuthorId(e.target.value)} />
                             <button
                                 style={{margin:'0', width:'7%',backgroundColor:'transparent', color:'black',opacity:'1'}}
@@ -162,7 +170,7 @@ function AllPost() {
                                 onMouseOver={(e) => e.target.style.opacity = '0.7'} // Hover effect
                                 onMouseOut={(e) => e.target.style.opacity = '1'}
                                 >Search</button>
-                            {/* category */}
+                            {/* category 
                             <input type="text" name="search-by-category" id="search-post-input" placeholder="Search by categoryId..." value={categoryId} onChange={(e)=>setCategoryId(e.target.value)} />
                             <button
                                 style={{margin:'0', width:'7%',backgroundColor:'transparent', color:'black',opacity:'1'}}
@@ -171,7 +179,7 @@ function AllPost() {
                                 onMouseOut={(e) => e.target.style.opacity = '1'}
                                 >Search</button>
                             </div>
-                        )}
+                        )}   */}
                             
                         </div>
                         <div className='btn-content'>
@@ -193,7 +201,7 @@ function AllPost() {
                                             <FontAwesomeIcon icon={faTimes} />
                                         </button>
                                     </div>
-                                    <MyEditor handleCloseEditor={handleCloseEditor} onPostSubmitted={handlePostSubmitted} selectedPost={selectedPost}/>
+                                    <MyEditor handleCloseEditor={handleCloseEditor} onPostSubmitted={handlePostSubmitted} selectedPost={selectedPost} initialCategoryIds={selectPosts}/>
                                 </div>)}
 
                     </div>
@@ -204,7 +212,7 @@ function AllPost() {
                                 <thead>
                                     <tr>
                                         <th>PostId</th>
-                                        <th>AuthorID</th>
+                                        <th>AuthorName</th>
                                         <th>Title</th>
                                         <th>Summary</th>
                                         <th>View</th>
@@ -215,7 +223,7 @@ function AllPost() {
                                 {searchResults.map((post, index) => (
                                     <tr key={index}>
                                         <td>{post.id}</td>
-                                        <td>{post.author && post.author.firstName ? post.author.id : post.author}</td>
+                                        <td>{post.author && post.author.firstName}</td>
                                         <td>{post.title}</td>
                                         <td>{post.summary}</td>
                                         <td>{post.views}</td>
@@ -234,7 +242,7 @@ function AllPost() {
                         <table style={{border:'1px solid', width:'75%'}}>
                             <thead style={{border:'1px solid'}}>
                                 <th>PostId</th>
-                                <th>AuthorID</th>
+                                <th>AuthorName</th>
                                 <th>Title</th>
                                 <th>Summary</th>
                                 <th>View</th>
@@ -245,15 +253,15 @@ function AllPost() {
                                 <tr key={startIndex+index} className='border-tr'>
                                     <td>{post.id}</td>
                                     {/* <td>{post.author && post.author.firstName}</td> */}
-                                    <td>{post.author && post.author.firstName ? post.author.id : post.author}</td>
+                                    <td>{post.author && post.author.firstName}</td>
                                     <td>
                                     <a href={post.link} target="_blank">
                                         {post.title}
                                     </a>
                                     <div className="td-action-links">
-                                        <a href="#" className="trash" onClick={()=>handleDeleteClick(post.id)}>Trash</a>
+                                        <a className="trash" onClick={()=>handleDeleteClick(post.id)}>Trash</a>
                                         <span className="inline-divider">|</span>
-                                        <a href="#" className="edit" onClick={()=>handleEditClick(post)}>Edit</a>
+                                        <a className="edit" onClick={()=>handleEditClick(post)}>Edit</a>
                                     </div>
                                     </td>
                                     

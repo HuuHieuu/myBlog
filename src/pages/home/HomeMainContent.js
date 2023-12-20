@@ -9,7 +9,8 @@ function MainContent() {
         <div className="container px-4 px-lg-5">
             <div className="row gx-4 gx-lg-5 justify-content-center">
                 <h1>Các bài viết mới nhất</h1>
-                <div className="col-md-9">
+                {/* <div className="col-md-9"> */}
+                <div className="">
                     <PostCardList/>
                 </div>
                 <br></br>

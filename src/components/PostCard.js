@@ -1,35 +1,43 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { Link } from "react-router-dom";
+import axios from 'axios';
+import styles from './PostCard.module.scss'
 
-export default function MediaCard() {
+export default function MediaCard({posts}) {
   return (
-    <Card sx={{ maxWidth: 345 }}>
-      <CardMedia
-        sx={{ height: 140 }}
-        image="https://i1-dulich.vnecdn.net/2022/05/11/hoan-kiem-lake-7673-1613972680-1508-1652253984.jpg?w=0&h=0&q=100&dpr=1&fit=crop&s=2wB1cBTUcNKuk68nrG6LMQ"
-        title="green iguana"
-      />
-      <CardContent>
-        <Typography gutterBottom variant="h5" component="div" textAlign="left"> 
-          <Link to={"/onepost"}>Demo Thẻ Bài Viết</Link>
-        </Typography>
-        <Typography variant="body2" color="text.secondary" textAlign="left"> 
-          Hiển thị một phần trích nhỏ của bài viết này,
-          cho người dùng đọc qua ở đây!
-        </Typography>
-        <Typography variant="body2" color="text.secondary" textAlign="left"> 
-          <i>
-            <br></br>
-            Đăng bởi <Link to={"#"}>TÊN NGƯỜI VIẾT</Link>
-            <br></br>
-          </i>
-          <br></br>07/11/2023
-        </Typography>
-      </CardContent>
-    </Card>
+    <div className={styles.cardContainer}>
+      {posts.map(post => (
+        <Link  to={`/posts/${post.id}`} key={post.id} sx={{ maxWidth: 345, margin: '10px' }}>
+          <CardMedia
+            sx={{ height: 140 }}
+            image={post.thumbnail || null} // Thay thế 'URL-mặc-định-nếu-không-có-hình-ảnh' bằng URL hình ảnh mặc định
+            title={post.title || 'Tiêu đề-mặc-định-nếu-không-có-tiêu-đề'} // Thay thế 'Tiêu đề-mặc-định-nếu-không-có-tiêu-đề' bằng tiêu đề mặc định
+          />
+          <CardContent>
+            <Typography gutterBottom variant="h5" component="div" textAlign="left">
+              {post.title || 'Tiêu đề-mặc-định-nếu-không-có-tiêu-đề'}{/* Thay thế tiêu đề mặc định */}
+            </Typography>
+            <Typography variant="body2" color="text.secondary" textAlign="left">
+              {post.summary || 'Nội dung-mặc-định-nếu-không-có-nội-dung'}{/* Thay thế nội dung mặc định */}
+            </Typography>
+            <Typography variant="body2" color="text.secondary" textAlign="left">
+              <i>
+                <br />
+                Đăng bởi {post.author && post.author.firstName || 'TÊN NGƯỜI VIẾT-mặc-định-nếu-không-có-tên-người-viết'}{/* Thay thế tên người viết mặc định */}
+                <br />
+                {/* 
+                {post.date || 'Ngày đăng-mặc-định-nếu-không-có-ngày-đăng'}{/* Thay thế ngày đăng mặc định */}
+                View: {post.views}
+              </i>
+              <br />
+            </Typography>
+          </CardContent>
+        </Link>
+       ))} 
+    </div>
   );
 }
