@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import Navbar from '../../components/Navbar';
 import CardMedia from '@mui/material/CardMedia';
+import styles from './postContent.module.scss'
 
 
 const PostContent = () => {
@@ -35,8 +36,10 @@ const PostContent = () => {
           sx={{height: 600}}
           image={post.thumbnail}
         />
-        <h1 style={{textAlign:'center'}}>{post.title}</h1>
-        <div dangerouslySetInnerHTML={{ __html: post.content }} />
+        <h1 className={styles.ckH1}>{post.title}</h1>
+        <div className={styles.ckDiv}
+          style={{margin:'20px 10%', textAlign:'justify'}}
+        dangerouslySetInnerHTML={{ __html: post.content }} />
         {/* <p>{post.content}</p> */}
         {/* Hiển thị nội dung và thông tin khác của bài viết */}
         {/* Ví dụ: <p>{post.content}</p> */}

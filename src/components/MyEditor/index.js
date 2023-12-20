@@ -7,7 +7,7 @@ import './MyEditor.css';
 
 const API_URL = "http://127.0.0.1:8080/api/blog/image/upload";
 
-export default function MyEditor({ handleCloseEditor,onPostSubmitted,selectedPost,initialCategoryIds, ...props }) {
+export default function MyEditor({ handleCloseEditor,onPostSubmitted,selectedPost,initialCategoryIds,resetEditor, ...props }) {
   const [editorData, setEditorData] = useState("");
   const [title, setTitle] = useState("");
   const [summary, setSummary] = useState("");
@@ -31,6 +31,24 @@ export default function MyEditor({ handleCloseEditor,onPostSubmitted,selectedPos
 //     // Cập nhật giá trị categoryIds khi initialCategoryIds thay đổi
 //     setCategoryIds(initialCategoryIds);
 //  }, [initialCategoryIds]);
+
+  useEffect(() => {
+    // Đặt lại trạng thái của CKEditor khi resetEditor thay đổi
+    if (resetEditor) {
+      setEditorData('');
+      setTitle('');
+      setSummary('');
+      setMetaTitle('');
+      setSlug('');
+      setPublished(false);
+      setThumbnail('');
+      setAuthorId('');
+      setParentId('');
+      setCategoryIds('')
+      setBody('')
+    }
+  }, [resetEditor]);
+
 
   useEffect(() => {
     // Lấy danh sách các danh mục từ server khi component được tạo

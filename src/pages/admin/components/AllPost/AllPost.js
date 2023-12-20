@@ -20,8 +20,12 @@ function AllPost() {
     const [authorId, setAuthorId] = useState('');
     const [categoryId, setCategoryId] = useState('');
     const [searchResults, setSearchResults] = useState(null);
+    const [resetEditor, setResetEditor] = useState(false);
     
-   
+    const handleAddClick = () =>{
+        setShowEditor(true);
+        setResetEditor(true);
+    }
     const handleCloseEditor = () => {
         setShowEditor(false);
     };
@@ -115,7 +119,7 @@ function AllPost() {
           .catch(error => {
             console.error('Error fetching posts by category:', error.message);
             setSearchResults([]);
-          });
+        });
       };
     
       const handleSearchByAuthor = () => {
@@ -188,7 +192,7 @@ function AllPost() {
                                     <FontAwesomeIcon icon={faTrashAlt}/>
                                     Trash
                                 </a>
-                                <a href="#" class="btn primary-btn small-btn" onClick={() => setShowEditor(true)}>
+                                <a href="#" class="btn primary-btn small-btn" onClick={handleAddClick}>
                                     <FontAwesomeIcon icon={faPlus}/>
                                     Add Post
                                 </a>
@@ -201,7 +205,7 @@ function AllPost() {
                                             <FontAwesomeIcon icon={faTimes} />
                                         </button>
                                     </div>
-                                    <MyEditor handleCloseEditor={handleCloseEditor} onPostSubmitted={handlePostSubmitted} selectedPost={selectedPost} initialCategoryIds={selectPosts}/>
+                                    <MyEditor handleCloseEditor={handleCloseEditor} onPostSubmitted={handlePostSubmitted} selectedPost={selectedPost} initialCategoryIds={selectPosts} resetEditor={resetEditor}/>
                                 </div>)}
 
                     </div>

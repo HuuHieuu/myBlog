@@ -1,0 +1,17 @@
+ @import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300&family=Roboto:wght@300;400&display=swap');
+.ckDiv img{
+    max-width: 100%; /* Ảnh sẽ không bị tràn khỏi phần tử cha */
+    height: auto;
+    text-align: center;
+}
+
+.ckDiv figure{
+    display: flex;
+    justify-content: center;
+}
+
+.ckH1{
+    text-align: center;
+    font-family: 'Roboto', sans-serif;
+    font-family: 'Roboto Slab', serif;
+}
