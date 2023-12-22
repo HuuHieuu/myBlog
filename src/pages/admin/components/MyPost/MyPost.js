@@ -9,7 +9,8 @@ import MyEditor from '../../../../components/MyEditor';
 import axios from 'axios';
 import Topic from '../Topic/Topic';
 
-function Unpublished() {
+function MyPost() {
+    const [user, setUser]=useState(null)
     const [showEditor, setShowEditor] = useState(false);
     const [posts,setPosts] = useState([]);
     const [selectedPost, setSelectedPost] = useState(null);
@@ -25,38 +26,25 @@ function Unpublished() {
     const [ispublished,setIspublished] = useState(false);
     const navigate = useNavigate();
     
-    const handlePublish = async (postId) => {
-        const currentDateTime = new Date();
-        try {
+    useEffect(() => {
+        const fetchUserInfo = async () => {
+          try {
             const token = localStorage.getItem('accessToken');
-            const headers = {
-                "Authorization": `Bearer ${token}`,
-            };
-    
-            // Gọi API để publish bài viết
-            await axios.post(`http://localhost:8080/api/blog/posts/admin/publish/${postId}`, {}, { headers });
-    
-            // Cập nhật trạng thái của bài viết trong danh sách state của bạn
-            const updatedPosts = posts.map(post => {
-                if (post.id === postId) {
-                    return { 
-                        ...post,
-                        published: true ,
-                        publishedAt: currentDateTime.toISOString(),    
-                    };
-                }
-                return post;
+            const response = await axios.get('http://localhost:8080/api/blog/users/info', {
+              headers: {
+                'Authorization': `Bearer ${token}`,
+              },
             });
-            setPosts(updatedPosts);
-            console.log(posts)
-
     
-            alert(`Đã publish bài viết id ${postId}`);
-            handlePostSubmitted()
-        } catch (error) {
-            console.error('Lỗi khi publish bài viết:', error.message);
-        }
-    };
+            const userData = response.data;
+            setUser(userData);
+            console.log(user.id);
+          } catch (error) {
+            console.error('Error fetching user info:', error);
+          }
+        };
+        fetchUserInfo();
+      }, []);
 
     const handleTitleClick=(id)=>{
         navigate(`/posts/${id}`);
@@ -66,9 +54,11 @@ function Unpublished() {
         setShowEditor(true);
         setResetEditor(true);
     }
+    
     const handleCloseEditor = () => {
         setShowEditor(false);
     };
+
     const handlePostSubmitted = async () => {
         // Lấy danh sách bài viết đã cập nhật
         try {
@@ -113,7 +103,7 @@ function Unpublished() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get('http://localhost:8080/api/blog/posts/notpublised');
+                const response = await axios.get(`http://localhost:8080/api/blog/posts/author/${user.id}`);
                 setPosts(response.data);
                 console.log(posts);
             } catch (error) {
@@ -122,7 +112,7 @@ function Unpublished() {
         };
     
         fetchData();
-    }, []);
+    }, [user]);
     
 
     const startIndex = (page - 1) * pageSize;
@@ -135,23 +125,6 @@ function Unpublished() {
     const click = ()=>{
         console.log(posts);
     }
-    const handleSearchButtonClick = () => {
-        setShowSearchOptions(!showSearchOptions);
-      };
-
-    const handleSearch = () => {
-
-        axios.get(`http://localhost:8080/api/blog/posts/keyword/${searchTerm}`)
-      .then(response => {
-        setSearchResults(response.data);
-      })
-      .catch(error => {
-        console.error('Error fetching user by ID:', error.message);
-        setSearchResults(null);
-      });
-    //   console.log('Selected Post:', selectPosts);
-    };
-
 
     return ( 
         <>
@@ -160,24 +133,11 @@ function Unpublished() {
         </div>
             <div className='post-container'>
                 <div className='post-content'>
-                    <h3>Unpublished</h3>
+                    <h3>My Post</h3>
                     <hr></hr>
                     <div className='btn-func'>
-                        <div className='table-action'>
-                            <input type="text" name="search-term" id="search-post-input" placeholder="Search..." value={searchTerm} onChange={(e)=>setSearchTerm(e.target.value)} />
-                            <button
-                                style={{margin:'0', width:'7%',backgroundColor:'transparent', color:'black',opacity:'1'}}
-                                onClick={handleSearch}
-                                onMouseOver={(e) => e.target.style.opacity = '0.7'} // Hover effect
-                                onMouseOut={(e) => e.target.style.opacity = '1'}
-                                >Search</button>
-                        </div>
                         <div className='btn-content'>
                             <div class="table-buttons">
-                                {/* <a href="#" class="btn warning-btn small-btn" onClick={click}>
-                                    <FontAwesomeIcon icon={faTrashAlt}/>
-                                    Trash
-                                </a> */}
                                 <a href="#" class="btn primary-btn small-btn" onClick={handleAddClick}>
                                     <FontAwesomeIcon icon={faPlus}/>
                                     Add Post
@@ -196,42 +156,6 @@ function Unpublished() {
 
                     </div>
                     {/* search by keyword */}
-                    {searchResults ? (
-                        <div className="table-post">
-                            <table style={{ border: '1px solid', width: '75%' }}>
-                                <thead>
-                                    <tr>
-                                        <th>PostId</th>
-                                        <th>AuthorName</th>
-                                        <th>Title</th>
-                                        <th>Summary</th>
-                                        <th>View</th>
-                                        <th>Publish</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                {searchResults.map((post, index) => (
-                                    <tr key={index}>
-                                        <td>{post.id}</td>
-                                        <td>{post.author && post.author.firstName}</td>
-                                        <td  href={post.link} target="_blank" onClick={()=>handleTitleClick(post.id)} style={{cursor:'pointer'}}>{post.title}</td>
-                                        <td>{post.summary}</td>
-                                        <td>{post.views}</td>
-                                        <td>
-                                        <div>
-                                            <a style={{color:'red', cursor:'pointer', opacity:'1'}}
-                                                onClick={()=>handlePublish(post.id)}
-                                                onMouseOver={(e) => e.target.style.opacity = '0.7'}
-                                                onMouseOut={(e) => e.target.style.opacity = '1'} 
-                                            >publish</a>
-                                        </div>
-                                        </td>
-                                    </tr>
-                                ))}
-                                </tbody>
-                        </table>
-                        </div>
-                    ): (
                     <div className='table-post'>
                         <table style={{border:'1px solid', width:'75%'}}>
                             <thead style={{border:'1px solid'}}>
@@ -253,8 +177,8 @@ function Unpublished() {
                                         {post.title}
                                     </a>
                                     <div className="td-action-links">
-                                        <a className="trash" onClick={()=>handleDeleteClick(post.id)}>Delete</a>
-                                        <span className="inline-divider">|</span>
+                                        {/* <a className="trash" onClick={()=>handleDeleteClick(post.id)}>Trash</a>
+                                        <span className="inline-divider">|</span> */}
                                         <a className="edit" onClick={()=>handleEditClick(post)}>Edit</a>
                                     </div>
                                     </td>
@@ -262,16 +186,16 @@ function Unpublished() {
                                     <td>{post.summary}</td> 
                                     <td>{post.views}</td>
                                     <td>
-                                        {/* <a href={post.publishLink}>
+                                        <a href={post.publishLink}>
                                             {post.published ? 'Publish' : 'Unpublish'}
-                                        </a> */}
-                                        <div>
+                                        </a>
+                                        {/* <div>
                                             <a style={{color:'red', cursor:'pointer', opacity:'1'}}
-                                                onClick={()=>handlePublish(post.id)}
+                                                // onClick={()=>handlePublish(post.id)}
                                                 onMouseOver={(e) => e.target.style.opacity = '0.7'}
                                                 onMouseOut={(e) => e.target.style.opacity = '1'} 
                                             >publish</a>
-                                        </div>
+                                        </div> */}
                                     </td>
                                 </tr>
                             ))}
@@ -294,11 +218,10 @@ function Unpublished() {
                             </tfoot>
                         </table>
                     </div>
-                    )}
                 </div>
             </div>
         </>
      );
 }
 
-export default Unpublished
+export default MyPost

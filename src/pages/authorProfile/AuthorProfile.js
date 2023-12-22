@@ -74,9 +74,9 @@ function AuthorProfile() {
                                         <div className="site-heading">
                                             <h2>{authorInfo.firstName} {authorInfo.lastName}</h2>
                                             <span className="subheading">
-                                                <i>
+                                                {/* <i>
                                                     "{authorInfo.intro}"
-                                                </i>
+                                                </i> */}
                                                 <img height="25" src="https://upload.wikimedia.org/wikipedia/commons/0/07/Flag_of_Vietnam-Animated.gif" style={{ marginLeft: '5px' }} alt="Vietnam Flag"></img>
                                             </span>
                                         </div>

@@ -174,7 +174,7 @@ export default function MyEditor({ handleCloseEditor,onPostSubmitted,selectedPos
       summary,
       metaTitle,
       slug,
-      published,
+      published: false,
       content: editorData,
       thumbnail,
       authorId,
@@ -324,10 +324,10 @@ export default function MyEditor({ handleCloseEditor,onPostSubmitted,selectedPos
               Thumbnail URL:
               <input type="file" className="blog-input" onChange={handleThumbnailChange}/>
             </label>
-            <label>
+            {/* <label>
               Parent Post ID:
               <input type="text" value={parentId} onChange={(e) => setParentId(e.target.value)} className="blog-input" />
-            </label>
+            </label> */}
             <label>
               Category: 
               {/* <input type="text" value={categoryIds} onChange={(e) => setCategoryIds(e.target.value.split(','))} className="blog-input" /> */}

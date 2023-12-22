@@ -326,7 +326,7 @@ function Topic({categoryIds}) {
                                             <td>{selectedCategories.id}</td>
                                             <td>{selectedCategories.title}
                                                 <div className="td-action-links">
-                                                    <a href="#" className="trash" onClick={()=>handleDeleteClick(selectedCategories.id)}>Trash</a>
+                                                    <a href="#" className="trash" onClick={()=>handleDeleteClick(selectedCategories.id)}>Delete</a>
                                                     <span className="inline-divider">|</span>
                                                     <a href="#" className="edit" onClick={()=>handleEditClick(selectedCategories)}>Edit</a>
                                                 </div>
@@ -353,7 +353,7 @@ function Topic({categoryIds}) {
                                         <td>{categorie.id}</td>
                                         <td>{categorie.title}
                                             <div className="td-action-links">
-                                                <a href="#" className="trash" onClick={()=>handleDeleteClick(categorie.id)}>Trash</a>
+                                                <a href="#" className="trash" onClick={()=>handleDeleteClick(categorie.id)}>Delete</a>
                                                 <span className="inline-divider">|</span>
                                                 <a href="#" className="edit" onClick={()=>handleEditClick(categorie)}>Edit</a>
                                             </div>

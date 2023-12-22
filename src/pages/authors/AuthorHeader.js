@@ -169,9 +169,9 @@ function AuthorHeader() {
                                         <div className="site-heading">
                                             <h2>{user.firstName} {user.lastName}</h2>
                                             <span className="subheading">
-                                                <i>
+                                                {/* <i>
                                                     "{user.intro}"
-                                                </i>
+                                                </i> */}
                                                 <img height="25" src="https://upload.wikimedia.org/wikipedia/commons/0/07/Flag_of_Vietnam-Animated.gif" style={{ marginLeft: '5px' }} alt="Vietnam Flag"></img>
                                             </span>
                                         </div>

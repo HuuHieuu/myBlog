@@ -9,6 +9,7 @@ import User from './components/User/User';
 import Role from './components/Role/Role';
 import Unpublished from './components/Unpublished/Unpublished';
 import axios from 'axios';
+import MyPost from './components/MyPost/MyPost';
 
 const tabItemsAdmin=[
     {label: "Unpublished", icon: faEyeSlash},
@@ -19,7 +20,9 @@ const tabItemsAdmin=[
 ]
 
 const tabItemsAuthor=[
-    {label: "Posts", icon: faFileAlt},
+    {label: "My Post", icon: faFileAlt},
+    // {label: "Unpublished", icon: faEyeSlash},
+    // {label: "Posts", icon: faFileAlt},
 ]
 
 function Admin() {
@@ -100,7 +103,9 @@ function Admin() {
                     )}
                     {role === 'ROLE_AUTHOR' && (
                         <div>
-                            {activeTab===0 && <AllPost/>}
+                            {activeTab===0 && <MyPost/>}
+                            {/* {activeTab===1 && <Unpublished/>}
+                            {activeTab===2 && <AllPost/>} */}
                         </div>
                     )}
                 </div>

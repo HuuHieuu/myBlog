@@ -6,7 +6,7 @@ import {isAuthenticated} from '../utils/auth'
 import './NavBar.css';
 import axios from "axios";
 import avatar from '../assets/image/avatar1.jpeg'
-import PostCardList from './PostCardList'
+import logo from '../assets/image/logo2.png'
 
 
 function Navbar() {
@@ -129,7 +129,10 @@ function Navbar() {
         <>
         <nav className="navbar navbar-expand-lg navbar-light" id="mainNav">
             <div className="container px-4 px-lg-5">
-                <Link className="navbar-brand" to="/">Blog Không Tên</Link>
+                <Link className="navbar-brand" to="/">
+                    <img src={logo}/>
+                    {/* Blog */}
+                </Link>
                 <div className="input-wrapper">
                     <FaSearch id="search-icon" onClick={handleSearch}/>
                     <input placeholder="Tìm kiếm"
@@ -144,12 +147,12 @@ function Navbar() {
                         <div style={{position:'absolute',top:'57px', left:'22.5%',backgroundColor:'#ddd6d645', width:'31%'}}>
                             <ul style={{padding:0}}>
                                 {searchResults.map((result) => (
-                                <li key={result.id} style={{listStyleType:'none'}}>
+                                <li key={result.id} style={{listStyleType:'none', boxShadow:'0px 0px 20px #ddd'}}>
                                 {/* </li> */}
                                  {/* <PostCardList postsBySearch={searchResults} displayMode="search" /> */}
                                     <div style={{display:'flex',width:'100%',justifyContent:'space-between', color:'white', cursor:'pointer'}} onClick={()=>handleTitleClick(result.id)}>
                                         {result.title}
-                                        <div style={{width:'30%',marginLeft:'2%'}}><img style={{width:'100%'}} src={result.thumbnail}/></div>
+                                        {/* <div style={{width:'30%',marginLeft:'2%'}}><img style={{width:'100%'}} src={result.thumbnail}/></div> */}
                                     </div>
                                  </li>
                                 ))}

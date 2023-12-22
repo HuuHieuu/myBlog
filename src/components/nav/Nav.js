@@ -1,6 +1,7 @@
 import { useUserContext } from "../Context/UserContext";
 import React, { useState} from "react";
 import { Link, useNavigate } from "react-router-dom";
+import logo from '../../assets/image/logo2.png'
 import './Nav.css';
 
 function Navbar({style}) {
@@ -29,7 +30,9 @@ function Navbar({style}) {
         <>
         <nav className="navbar navbar-expand-lg navbar-light" id="mainNav">
             <div className="container px-4 px-lg-5">
-                <Link style={{color:'black'}} className="navbar-brand" to="/">Blog Không Tên</Link>
+                <Link style={{color:'black'}} className="navbar-brand" to="/">
+                    <img src={logo}/>
+                </Link>
                 <div className="collapse navbar-collapse" id="navbarResponsive">
                     <ul className="navbar-nav ms-auto py-4 py-lg-0">
                         <li className="nav-item"><Link style={{color:'black'}} className="nav-link px-lg-3 py-3 py-lg-4" to="/">TRANG CHỦ</Link></li>
