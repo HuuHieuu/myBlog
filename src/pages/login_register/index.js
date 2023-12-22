@@ -14,8 +14,20 @@ function LoginRegister() {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [email, setEmail] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-
   const navigate = useNavigate();
+
+  const isValidPhoneNumber = (phoneNumber) => {
+    // Sử dụng biểu thức chính quy để kiểm tra định dạng số điện thoại
+    const phoneRegex = /^\d{10}$/; // 10 chữ số
+    return phoneRegex.test(phoneNumber);
+  };
+
+  const isValidEmail = (email) => {
+    // Sử dụng biểu thức chính quy để kiểm tra định dạng email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
   const handleResetError = () =>{
     setErrorMessage("");
   }
@@ -45,14 +57,27 @@ function LoginRegister() {
   };
 
   const handlePhoneNumberChange = (event) => {
-    setPhoneNumber(event.target.value);
+    const value = event.target.value;
+    setPhoneNumber(value);
     setErrorMessage('');
+    if (!isValidPhoneNumber(value)) {
+      setErrorMessage('Số điện thoại không hợp lệ.');
+    }
   };
 
   const handleEmailChange = (event) =>{
-    setEmail(event.target.value);
+    const value = event.target.value;
+    setEmail(value);
     setErrorMessage('');
+    if (!isValidEmail(value)) {
+      setErrorMessage('Email không hợp lệ.');
+    }
   }
+
+  const capitalizeFirstLetter = (str) => {
+    return str.toLowerCase().replace(/(?:^|\s)\S/g, (char) => char.toUpperCase());
+  };
+  
 
   // login
   const handleLogin = async (e) => {
@@ -61,7 +86,10 @@ function LoginRegister() {
       const response = await axios.post('http://localhost:8080/api/blog/users/login', {
         username: username,
         passwordHash: password,
-      });
+      },{
+        headers: {
+          'Content-Type': 'application/json',
+        },});
 
       // Lấy token từ response
       const token = response.data;
@@ -94,21 +122,25 @@ function LoginRegister() {
       setErrorMessage('Vui lòng nhập đầy đủ thông tin.');
       return;
     }
+    const formattedFirstName = capitalizeFirstLetter(firstName);
+    const formattedLasttName = capitalizeFirstLetter(lastName);
 
     try {
       const response = await axios.post('http://localhost:8080/api/blog/users/register', {
         username: username,
         passwordHash: password,
-        firstName: firstName,
-        lastName: lastName,
+        firstName: formattedFirstName,
+        lastName: formattedLasttName,
         mobile: phoneNumber,
         email: email,
       });
 
-      const token = response.data;
-      localStorage.setItem('accessToken', token);
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-      navigate('/');
+      // const token = response.data;
+      // localStorage.setItem('accessToken', token);
+      // axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      window.alert('Bạn đã đăng ký thành công!');
+      window.location.reload();
+      // navigate('/login');
     } catch (error) {
       console.error('Đăng ký thất bại:', error.message);
       setErrorMessage('Đăng ký không thành công. Vui lòng kiểm tra lại thông tin.');

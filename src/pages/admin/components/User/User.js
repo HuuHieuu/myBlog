@@ -70,7 +70,13 @@ function User() {
     try {
       if(userRole === 'ROLE_ADMIN'){
         // Gửi yêu cầu PUT để cập nhật người dùng
-        const response = await axios.put(`http://localhost:8080/api/blog/users?id=${editUser.id}`, editUser,);
+        const response = await axios.put(`http://localhost:8080/api/blog/users?id=${editUser.id}`, editUser,
+        {
+          headers: {
+              'Content-Type': 'application/json',
+          },
+        }
+      );
     
         // Kiểm tra xem yêu cầu thành công hay không
         if (response.status === 200) {

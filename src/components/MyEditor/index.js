@@ -7,7 +7,7 @@ import './MyEditor.css';
 
 const API_URL = "http://127.0.0.1:8080/api/blog/image/upload";
 
-export default function MyEditor({ handleCloseEditor,onPostSubmitted,selectedPost,initialCategoryIds,resetEditor, ...props }) {
+export default function MyEditor({ handleCloseEditor,onPostSubmitted,selectedPost,initialCategoryIds,resetEditor,isPublished, ...props }) {
   const [editorData, setEditorData] = useState("");
   const [title, setTitle] = useState("");
   const [summary, setSummary] = useState("");
@@ -20,6 +20,7 @@ export default function MyEditor({ handleCloseEditor,onPostSubmitted,selectedPos
   const [categoryIds, setCategoryIds] = useState([]);
   const [body, setBody] = useState("");
   const [authorName,setAuthorName]=useState();
+  const [roleUser,setRoleUser] = useState(null);
 
   // 
   const [categories, setCategories] = useState([]);
@@ -27,10 +28,15 @@ export default function MyEditor({ handleCloseEditor,onPostSubmitted,selectedPos
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [categoryOptions, setCategoryOptions] = useState([]);
 
-//   useEffect(() => {
-//     // Cập nhật giá trị categoryIds khi initialCategoryIds thay đổi
-//     setCategoryIds(initialCategoryIds);
-//  }, [initialCategoryIds]);
+  const handlePublishhedChange =(e)=>{
+      if(roleUser === 'ROLE_ADMIN'){
+        setPublished(e.target.checked);
+      }else {
+        // Nếu không, thông báo rằng người dùng không có quyền
+        alert('Bạn không có quyền thực hiện thay đổi này.');
+      }
+  }
+
 
   useEffect(() => {
     // Đặt lại trạng thái của CKEditor khi resetEditor thay đổi
@@ -44,7 +50,7 @@ export default function MyEditor({ handleCloseEditor,onPostSubmitted,selectedPos
       setThumbnail('');
       setAuthorId('');
       setParentId('');
-      setCategoryIds('')
+      setCategoryIds([])
       setBody('')
     }
   }, [resetEditor]);
@@ -102,6 +108,8 @@ export default function MyEditor({ handleCloseEditor,onPostSubmitted,selectedPos
         console.log(userData.firstName);
         setAuthorId(userData.id);
         setAuthorName(userData.firstName);
+        setRoleUser(userData.roles.role);
+        
       } catch (error) {
         console.error('Error fetching user info:', error);
       }
@@ -307,10 +315,11 @@ export default function MyEditor({ handleCloseEditor,onPostSubmitted,selectedPos
               Summary:
               <textarea value={summary} onChange={(e) => setSummary(e.target.value)} required className="blog-input" />
             </label>
-            <label>
+            {/* <label>
               Published:
               <input type="checkbox" checked={published} onChange={(e) => setPublished(e.target.checked)} className="blog-input" />
-            </label>
+              <input type="checkbox" checked={published} className="blog-input" onChange={handlePublishhedChange}/>
+            </label> */}
             <label>
               Thumbnail URL:
               <input type="file" className="blog-input" onChange={handleThumbnailChange}/>

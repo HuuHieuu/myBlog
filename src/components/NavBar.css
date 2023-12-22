@@ -73,13 +73,14 @@ input:focus{
 }
 
 .menu-open button:hover{
-  background-color: #797474;
+  background-color: #9b8f8f85;
 }
 
 .user-avatar-df{
   width: 40px;
   border-radius: 50%;
   margin-top: 11px;
+  height: 40px;
 }
 
 

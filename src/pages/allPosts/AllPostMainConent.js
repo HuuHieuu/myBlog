@@ -43,16 +43,60 @@ function MainContent() {
   const handleTabClick = async (index, categoryId) => {
     setActiveTab(index);
   
+    // try {
+    //   // Gọi API để lấy tất cả các bài viết trong danh mục
+    //   const response = await axios.get(`http://localhost:8080/api/blog/posts/category/${categoryId}`);
+    //   const postsInCategory = response.data;
+
+    //   // Lấy index của bài viết đã xuất bản (nếu có)
+    //   const publishedPostsInCategory = postsInCategory.filter(post => post.published);
+  
+    //   // Tạo endpoint dựa trên trạng thái xuất bản của bài viết đầu tiên trong danh mục
+    //   const finalResponse = await axios.get('http://localhost:8080/api/blog/posts/publised', {
+    //     posts: publishedPostsInCategory
+    //   });
+
+    //   setPostsByCategory(finalResponse.data);
+    // } catch (error) {
+    //   console.error('Error fetching posts by category:', error.message);
+    //   setPostsByCategory([]);
+    // }
+    
     try {
-      // Gọi API để lấy các bài post theo danh mục
-      const response = await axios.get(`http://localhost:8080/api/blog/posts/category/${categoryId}`);
-      setPostsByCategory(response.data);
-      console.log(postsByCategory)
+      // Gọi API để lấy tất cả các bài viết đã xuất bản
+      const publishedResponse = await axios.get('http://localhost:8080/api/blog/posts/publised');
+      const publishedPosts = publishedResponse.data;
+    
+      // Kiểm tra xem đã có bài viết đã xuất bản hay chưa
+      if (publishedPosts.length > 0) {
+        // Nếu có bài viết đã xuất bản, lấy danh sách bài viết theo danh mục
+        const response = await axios.get(`http://localhost:8080/api/blog/posts/category/${categoryId}`);
+        const postsInCategory = response.data;
+    
+        // Lọc chỉ giữ lại các bài viết đã xuất bản
+        const publishedPostsInCategory = postsInCategory.filter(post => post.published);
+    
+        // Sử dụng danh sách bài viết đã xuất bản từ publishedResponse hoặc publishedPostsInCategory
+        setPostsByCategory(publishedPostsInCategory); // Hoặc setPostsByCategory(publishedPostsInCategory);
+      } else {
+        // Nếu không có bài viết đã xuất bản, lấy danh sách bài viết theo danh mục trực tiếp
+        const response = await axios.get(`http://localhost:8080/api/blog/posts/category/${categoryId}`);
+        setPostsByCategory(response.data);
+      }
     } catch (error) {
       console.error('Error fetching posts by category:', error.message);
       setPostsByCategory([]);
     }
+    
+
+
+
   };
+
+  useEffect(() => {
+    console.log(postsByCategory);
+  }, [postsByCategory]);
+  
 
 
 
@@ -83,7 +127,7 @@ function MainContent() {
         // published = true
         const response = await axios.get('http://localhost:8080/api/blog/posts/publised');
         const sortedPosts = response.data.sort((a, b) => {
-          return new Date(b.publishedAt) - new Date(a.publishedAt);
+          return new Date(b.updatedAt) - new Date(a.updatedAt);
         });
         const latestSixPosts = sortedPosts.slice(0, 6);
 

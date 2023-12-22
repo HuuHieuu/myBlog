@@ -40,7 +40,7 @@ function Navbar({style}) {
                                 BÀI VIẾT
                             </Link>
                         </li>
-                        <li className="nav-item"><Link style={{color:'black'}}  className="nav-link px-lg-3 py-3 py-lg-4" to="index.html">GIỚI THIỆU</Link></li>
+                        {/* <li className="nav-item"><Link style={{color:'black'}}  className="nav-link px-lg-3 py-3 py-lg-4" to="index.html">GIỚI THIỆU</Link></li> */}
                     </ul>
                 </div>
             </div>

@@ -1,17 +1,81 @@
 import { jwtDecode } from "jwt-decode";
-import React, { useState, useEffect,  } from "react";
+import React, { useState, useEffect,useCallback  } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {FaSearch} from 'react-icons/fa';
 import {isAuthenticated} from '../utils/auth'
 import './NavBar.css';
+import axios from "axios";
 import avatar from '../assets/image/avatar1.jpeg'
+import PostCardList from './PostCardList'
 
 
 function Navbar() {
     const [loggedIn, setLoggedIn] = useState(isAuthenticated());
     const [isMenuOpen, setMenuOpen] = useState(false);
     const [userRole, setUserRole] = useState('');
+    const [user, setUser] = useState(null);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [searchResults2, setSearchResults2] = useState([])
+    const [searchResults, setSearchResults] = useState([])
+    const displayMode = 'search'
     const navigate = useNavigate();
+
+    const handleTitleClick=(id)=>{
+        navigate(`/posts/${id}`);
+    }
+    
+
+    const handleSearch = async() => {
+        if (searchTerm.trim() !== '') {
+            try {
+                const response = await axios.get(`http://localhost:8080/api/blog/posts/keyword/${searchTerm}`);
+                const publishedResults = response.data.filter(post => post.published);
+                setSearchResults(publishedResults);
+                // setSearchResults(response.data);
+                console.log('After handleSearch - searchResults:', searchResults);
+            } catch (error) {
+                console.error('Error fetching user by ID:', error.message);
+                setSearchResults([]);
+            }
+        }else{
+            setSearchResults([])
+        }
+        console.log('After handleSearch - searchResults:', searchResults);
+    };
+
+    useEffect(() => {
+        // useEffect này sẽ chạy mỗi khi searchResults thay đổi
+        console.log('Updated searchResults:', searchResults);
+    }, [searchResults]);
+
+    const handleSearchInputChange = (event) => {
+        event.persist(); // Giữ lại sự kiện
+      
+        setSearchTerm(event.target.value);
+      };
+
+    const handleKeyDown = (event)=>{
+        if (event.key === 'Enter') {
+            console.log('searchTerm Value:', searchTerm);
+            console.log('Before handleSearch - searchTerm:', searchTerm);
+            handleSearch();
+          }
+    }
+
+    useEffect(()=>{
+        const fetchPost = async () => {
+            try {
+              const response = await axios.get(`http://localhost:8080/api/blog/users/info`);
+              setUser(response.data);
+            //   console.log('User:', response.data);
+            // console.log(user.profile)
+            } catch (error) {
+              console.error('Error fetching post:', error.message);
+            }
+          };
+          fetchPost();
+    },[])
+
     const handleLogout = () => {
         // Xóa token khi đăng xuất
         localStorage.removeItem('accessToken');
@@ -58,25 +122,7 @@ function Navbar() {
         }
       }, []);
 
-      
-
-
-    // useEffect(() => {
-
-
-
-        // const categoriesMenu = document.querySelector('.nav-item.categories');
-        
-
-        // categoriesMenu.addEventListener('mouseenter', () => {
-        //     categoriesMenu.querySelector('.dropdown-menu').classList.add('show');
-        // });
-
-        // categoriesMenu.addEventListener('mouseleave', () => {
-        //     categoriesMenu.querySelector('.dropdown-menu').classList.remove('show');
-        // });
-        
-    // }, []);
+    
 
 
     return (
@@ -85,8 +131,31 @@ function Navbar() {
             <div className="container px-4 px-lg-5">
                 <Link className="navbar-brand" to="/">Blog Không Tên</Link>
                 <div className="input-wrapper">
-                    <FaSearch id="search-icon"/>
-                    <input placeholder="Tìm kiếm"/>
+                    <FaSearch id="search-icon" onClick={handleSearch}/>
+                    <input placeholder="Tìm kiếm"
+                        name="search-term" 
+                        id="search-post-input"
+                        value={searchTerm}
+                        onChange={(e)=>setSearchTerm(e.target.value)}
+                        onKeyDown={handleKeyDown}
+                        style={{position:'relative'}}
+                    />
+                    {searchResults && searchResults.length > 0 && (
+                        <div style={{position:'absolute',top:'57px', left:'22.5%',backgroundColor:'#ddd6d645', width:'31%'}}>
+                            <ul style={{padding:0}}>
+                                {searchResults.map((result) => (
+                                <li key={result.id} style={{listStyleType:'none'}}>
+                                {/* </li> */}
+                                 {/* <PostCardList postsBySearch={searchResults} displayMode="search" /> */}
+                                    <div style={{display:'flex',width:'100%',justifyContent:'space-between', color:'white', cursor:'pointer'}} onClick={()=>handleTitleClick(result.id)}>
+                                        {result.title}
+                                        <div style={{width:'30%',marginLeft:'2%'}}><img style={{width:'100%'}} src={result.thumbnail}/></div>
+                                    </div>
+                                 </li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
                 </div>
                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
                     Menu
@@ -102,11 +171,11 @@ function Navbar() {
                                 BÀI VIẾT
                             </Link>
                         </li>
-                        <li className="nav-item"><Link className="nav-link px-lg-3 py-3 py-lg-4" to="index.html">GIỚI THIỆU</Link></li>
+                        {/* <li className="nav-item"><Link className="nav-link px-lg-3 py-3 py-lg-4" to="index.html">GIỚI THIỆU</Link></li> */}
                         <li className="nav-item">
                             {loggedIn ? (
                                 <div className="user-avatar">
-                                    <img className="user-avatar-df" src={avatar} alt="User"  onClick={() => setMenuOpen(!isMenuOpen)}/>
+                                    <img className="user-avatar-df" src={user && user.profile ? user.profile : avatar} alt="User"  onClick={() => setMenuOpen(!isMenuOpen)}/>
                                     {isMenuOpen && (
                                         <div className="menu-open">
                                             {userRole.includes('ROLE_ADMIN') && 

@@ -5,6 +5,7 @@ import '../AllPost/AllPost.css'
 import { useState,useEffect } from 'react';
 import axios from 'axios';
 function Role() {
+    const [roleU, setRoleU] = useState(['ROLE_ADMIN', 'ROLE_AUTHOR', 'ROLE_GUEST']);
     const [roles, setRoles] = useState([]);
     const [showFormRoleEdit, setShowFormRoleEdit] = useState(false);
     const [editRole, setEditRole] = useState(null);
@@ -21,7 +22,7 @@ function Role() {
         // Gửi yêu cầu GET đến API Endpoint /admin khi component được mount
         axios.get('http://localhost:8080/api/blog/admin/role')
             .then(response => {
-            // Nếu yêu cầu thành công, cập nhật state với danh sách người dùng từ server
+            // Nếu yêu cầu thành công, cập nhật state với danh sách role từ server
             setRoles(response.data);
             })
             .catch(error => {
@@ -182,6 +183,20 @@ function Role() {
                                 </div>
                                 <div className='flex-user-content'>
                                     <label>Role:</label>
+                                    {/* <select
+                                        style={{ border: '1px solid black', width: '45%', marginLeft: '1.4%', color: 'black', marginRight: '1.4%' }}
+                                        value={newRole.role}
+                                        onChange={(e) => setNewRole({ ...newRole, role: e.target.value })}
+                                    >
+                                        <option value="" disabled>Select a role</option>
+                                        {roles
+                                            .filter(role => role.role === 'ROLE_ADMIN' || role.role === 'ROLE_AUTHOR' || role.role === 'ROLE_GUEST')
+                                            .map((role) => (
+                                                <option key={role.roleId} value={role.role}>
+                                                    {role.role}
+                                                </option>
+                                        ))}
+                                    </select> */}
                                     <input
                                         style={{border:'1px solid black', width:'45%', marginLeft:'1.4%',color:'black',marginRight:'1.4%'}}
                                         type="role"

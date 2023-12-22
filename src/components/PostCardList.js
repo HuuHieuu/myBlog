@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import PostCard from './PostCard';
 
-export default function CardList({categoryId, displayMode,postsByCategory}) {
+export default function CardList({categoryId, displayMode,postsByCategory, postsByAuthorprofile,postsBySearch, postsAP}) {
   
   const [posts, setPosts] = useState([]);
   const [postByCategory, setPostByCategory] = useState([])
@@ -18,7 +18,7 @@ export default function CardList({categoryId, displayMode,postsByCategory}) {
         // published = true
         const response = await axios.get('http://localhost:8080/api/blog/posts/publised');
         const sortedPosts = response.data.sort((a, b) => {
-          return new Date(b.publishedAt) - new Date(a.publishedAt);
+          return new Date(b.updatedAt) - new Date(a.updatedAt);
         });
         const latestSixPosts = sortedPosts.slice(0, 6);
 
@@ -36,6 +36,12 @@ export default function CardList({categoryId, displayMode,postsByCategory}) {
       <div>
         {displayMode === 'byCate' ? (
           <PostCard posts={postsByCategory} />
+        ) : displayMode === 'authorProfile' ? (
+          <PostCard posts={postsByAuthorprofile}/>
+        ): displayMode === 'search' ?(
+          <PostCard posts={postsBySearch} />
+        ) : displayMode === 'ap' ? (
+          <PostCard posts={postsAP} />
         ) : (
           <PostCard posts={posts} />
         )}

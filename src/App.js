@@ -12,6 +12,7 @@ import Admin from './pages/admin/admin';
 import LoginRegister from './pages/login_register/index'
 // import CardList from './components/PostCardList';
 import PostContent from './pages/post/postContent';
+import AuthorProfile from './pages/authorProfile/AuthorProfile';
 
 
 const App = () => {
@@ -28,6 +29,8 @@ const App = () => {
           <Route path='new-post' element={<NewPostEditor/>}/>
           <Route path='/admin' element={<Admin/>}/>
           <Route path='/posts/:postId' element={<PostContent/>}/>
+          <Route path='/profile' element={<Author/>}/>
+          <Route path='/profile/:authorId' element={<AuthorProfile/>}/>
         </Routes>
       </Router>
     </UserProvider>

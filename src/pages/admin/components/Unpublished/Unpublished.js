@@ -4,13 +4,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
-import './AllPost.css'
+import '../AllPost/AllPost.css'
 import MyEditor from '../../../../components/MyEditor';
 import axios from 'axios';
 import Topic from '../Topic/Topic';
-import { FaCommentsDollar } from 'react-icons/fa';
 
-function AllPost() {
+function Unpublished() {
     const [showEditor, setShowEditor] = useState(false);
     const [posts,setPosts] = useState([]);
     const [selectedPost, setSelectedPost] = useState(null);
@@ -23,43 +22,10 @@ function AllPost() {
     const [categoryId, setCategoryId] = useState('');
     const [searchResults, setSearchResults] = useState(null);
     const [resetEditor, setResetEditor] = useState(false);
-    const [role, setRole] = useState(null);
-    const [currentUser, setCurrentUser] = useState(null);
+    const [ispublished,setIspublished] = useState(false);
     const navigate = useNavigate();
-    useEffect(() => {
-        const fetchUserInfo = async () => {
-          try {
-            const token = localStorage.getItem('accessToken');
-            const response = await axios.get('http://localhost:8080/api/blog/users/info', {
-              headers: {
-                'Authorization': `Bearer ${token}`,
-              },
-            });
     
-            const userData = response.data;
-            console.log(userData.roles.role);
-            setRole(userData.roles.role);
-            setCurrentUser(userData);
-          } catch (error) {
-            console.error('Error fetching user info:', error);
-          }
-        };
-        fetchUserInfo();
-      }, []);
-
-    const handleTitleClick=(id)=>{
-        navigate(`/posts/${id}`);
-    }
-    
-    const handleAddClick = () =>{
-        setShowEditor(true);
-        setResetEditor(true);
-    }
-    const handleCloseEditor = () => {
-        setShowEditor(false);
-    };
-
-    const handleUnpublish = async(postId) =>{
+    const handlePublish = async (postId) => {
         const currentDateTime = new Date();
         try {
             const token = localStorage.getItem('accessToken');
@@ -68,7 +34,7 @@ function AllPost() {
             };
     
             // Gọi API để publish bài viết
-            await axios.post(`http://localhost:8080/api/blog/posts/admin/unpublish/${postId}`, {}, { headers });
+            await axios.post(`http://localhost:8080/api/blog/posts/admin/publish/${postId}`, {}, { headers });
     
             // Cập nhật trạng thái của bài viết trong danh sách state của bạn
             const updatedPosts = posts.map(post => {
@@ -85,17 +51,28 @@ function AllPost() {
             console.log(posts)
 
     
-            alert(`Đã UnPublish bài viết id ${postId}`);
+            alert(`Đã publish bài viết id ${postId}`);
             handlePostSubmitted()
         } catch (error) {
             console.error('Lỗi khi publish bài viết:', error.message);
         }
+    };
+
+    const handleTitleClick=(id)=>{
+        navigate(`/posts/${id}`);
     }
 
+    const handleAddClick = () =>{
+        setShowEditor(true);
+        setResetEditor(true);
+    }
+    const handleCloseEditor = () => {
+        setShowEditor(false);
+    };
     const handlePostSubmitted = async () => {
         // Lấy danh sách bài viết đã cập nhật
         try {
-          const response = await axios.get('http://localhost:8080/api/blog/posts/publised');
+          const response = await axios.get('http://localhost:8080/api/blog/posts/notpublised');
           // Cập nhật trạng thái với dữ liệu mới
           setPosts(response.data);
         } catch (error) {
@@ -105,20 +82,11 @@ function AllPost() {
 
     const handleEditClick = (post) => {
         // Lưu bài viết được chọn vào trạng thái và hiển thị trình soạn thảo
-        if (currentUser && post.author && currentUser.id === post.author.id) {
-            // Người dùng hiện tại là tác giả của bài viết, cho phép sửa bài viết
-            setSelectedPost(post);
-            setSelectPosts(post.categories);
-            setShowEditor(true);
-        } else {
-            // Người dùng không có quyền sửa bài viết của người khác
-            alert('Bạn không được phép sửa bài viết của người khác.');
-        }
-        
-        // setSelectedPost(post);
-        // setSelectPosts(post.categories)
-        // setShowEditor(true);
-    };
+        setSelectedPost(post);
+        setSelectPosts(post.categories)
+        setShowEditor(true);
+        console.log(post);
+      };
 
     const handleDeleteClick = async (postId) => {
         const confirmed = window.confirm("Bạn có chắc chắn muốn xóa bài viết này?");
@@ -145,9 +113,8 @@ function AllPost() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get('http://localhost:8080/api/blog/posts/publised');
-                const sortedPosts = response.data.sort((a, b) => b.id - a.id);
-                setPosts(sortedPosts);
+                const response = await axios.get('http://localhost:8080/api/blog/posts/notpublised');
+                setPosts(response.data);
             } catch (error) {
                 console.error('Error fetching data:', error.message);
             }
@@ -175,9 +142,7 @@ function AllPost() {
 
         axios.get(`http://localhost:8080/api/blog/posts/keyword/${searchTerm}`)
       .then(response => {
-        const publishedResults = response.data.filter(post => post.published);
-        setSearchResults(publishedResults);
-        // setSearchResults(response.data);
+        setSearchResults(response.data);
       })
       .catch(error => {
         console.error('Error fetching user by ID:', error.message);
@@ -186,27 +151,6 @@ function AllPost() {
     //   console.log('Selected Post:', selectPosts);
     };
 
-    const handleSearchByCategory = () => {
-        axios.get(`http://localhost:8080/api/blog/posts/category/${categoryId}`)
-          .then(response => {
-            setSearchResults(response.data);
-          })
-          .catch(error => {
-            console.error('Error fetching posts by category:', error.message);
-            setSearchResults([]);
-        });
-      };
-    
-      const handleSearchByAuthor = () => {
-        axios.get(`http://localhost:8080/api/blog/posts/author/${authorId}`)
-          .then(response => {
-            setSearchResults(response.data);
-          })
-          .catch(error => {
-            console.error('Error fetching posts by author:', error.message);
-            setSearchResults([]);
-          });
-      };
 
     return ( 
         <>
@@ -215,15 +159,10 @@ function AllPost() {
         </div>
             <div className='post-container'>
                 <div className='post-content'>
-                    <h3>Posts</h3>
+                    <h3>Unpublished</h3>
                     <hr></hr>
                     <div className='btn-func'>
                         <div className='table-action'>
-                            {/* <button onClick={handleSearchButtonClick}
-                                className='search-css-btn'
-                            >
-                                Search
-                            </button> */}
                             <input type="text" name="search-term" id="search-post-input" placeholder="Search..." value={searchTerm} onChange={(e)=>setSearchTerm(e.target.value)} />
                             <button
                                 style={{margin:'0', width:'7%',backgroundColor:'transparent', color:'black',opacity:'1'}}
@@ -231,35 +170,6 @@ function AllPost() {
                                 onMouseOver={(e) => e.target.style.opacity = '0.7'} // Hover effect
                                 onMouseOut={(e) => e.target.style.opacity = '1'}
                                 >Search</button>
-                     {/*   {showSearchOptions && (
-                            <div>
-                                {/* keyword 
-                            <input type="text" name="search-term" id="search-post-input" placeholder="Search..." value={searchTerm} onChange={(e)=>setSearchTerm(e.target.value)} />
-                            <button
-                                style={{margin:'0', width:'7%',backgroundColor:'transparent', color:'black',opacity:'1'}}
-                                onClick={handleSearch}
-                                onMouseOver={(e) => e.target.style.opacity = '0.7'} // Hover effect
-                                onMouseOut={(e) => e.target.style.opacity = '1'}
-                                >Search</button>
-                            {/* author 
-                            <input type="text" name="search-by-author" id="search-post-input" placeholder="Search by authorId..." value={authorId} onChange={(e)=>setAuthorId(e.target.value)} />
-                            <button
-                                style={{margin:'0', width:'7%',backgroundColor:'transparent', color:'black',opacity:'1'}}
-                                onClick={handleSearchByAuthor}
-                                onMouseOver={(e) => e.target.style.opacity = '0.7'} // Hover effect
-                                onMouseOut={(e) => e.target.style.opacity = '1'}
-                                >Search</button>
-                            {/* category 
-                            <input type="text" name="search-by-category" id="search-post-input" placeholder="Search by categoryId..." value={categoryId} onChange={(e)=>setCategoryId(e.target.value)} />
-                            <button
-                                style={{margin:'0', width:'7%',backgroundColor:'transparent', color:'black',opacity:'1'}}
-                                onClick={handleSearchByCategory}
-                                onMouseOver={(e) => e.target.style.opacity = '0.7'} // Hover effect
-                                onMouseOut={(e) => e.target.style.opacity = '1'}
-                                >Search</button>
-                            </div>
-                        )}   */}
-                            
                         </div>
                         <div className='btn-content'>
                             <div class="table-buttons">
@@ -280,7 +190,7 @@ function AllPost() {
                                             <FontAwesomeIcon icon={faTimes} />
                                         </button>
                                     </div>
-                                    <MyEditor handleCloseEditor={handleCloseEditor} onPostSubmitted={handlePostSubmitted} selectedPost={selectedPost} initialCategoryIds={selectPosts} resetEditor={resetEditor}/>
+                                    <MyEditor handleCloseEditor={handleCloseEditor} onPostSubmitted={handlePostSubmitted} selectedPost={selectedPost} initialCategoryIds={selectPosts} resetEditor={resetEditor} isPublished={ispublished}/>
                                 </div>)}
 
                     </div>
@@ -295,9 +205,7 @@ function AllPost() {
                                         <th>Title</th>
                                         <th>Summary</th>
                                         <th>View</th>
-                                        {role === 'ROLE_ADMIN' && (
-                                            <th>Publish</th>  
-                                        )}
+                                        <th>Publish</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -305,26 +213,17 @@ function AllPost() {
                                     <tr key={index}>
                                         <td>{post.id}</td>
                                         <td>{post.author && post.author.firstName}</td>
-                                        <td>
-                                        <a href={post.link} target="_blank" onClick={()=>handleTitleClick(post.id)} style={{cursor:'pointer'}}>
-                                            {post.title}
-                                        </a>
-                                            <div className="td-action-links">
-                                                <a className="edit" onClick={()=>handleEditClick(post)}>Edit</a>
-                                            </div>
-                                        </td>
+                                        <td  href={post.link} target="_blank" onClick={()=>handleTitleClick(post.id)} style={{cursor:'pointer'}}>{post.title}</td>
                                         <td>{post.summary}</td>
                                         <td>{post.views}</td>
                                         <td>
-                                            {role === 'ROLE_ADMIN' && (
-                                                <div>
-                                                    <a style={{color:'red', cursor:'pointer', opacity:'1'}}
-                                                        onClick={()=>handleUnpublish(post.id)}
-                                                        onMouseOver={(e) => e.target.style.opacity = '0.7'}
-                                                        onMouseOut={(e) => e.target.style.opacity = '1'} 
-                                                    >UnPublish</a>
-                                                </div>
-                                            )}
+                                        <div>
+                                            <a style={{color:'red', cursor:'pointer', opacity:'1'}}
+                                                onClick={()=>handlePublish(post.id)}
+                                                onMouseOver={(e) => e.target.style.opacity = '0.7'}
+                                                onMouseOut={(e) => e.target.style.opacity = '1'} 
+                                            >publish</a>
+                                        </div>
                                         </td>
                                     </tr>
                                 ))}
@@ -340,9 +239,7 @@ function AllPost() {
                                 <th>Title</th>
                                 <th>Summary</th>
                                 <th>View</th>
-                                {role === 'ROLE_ADMIN' && (
-                                    <th>Publish</th>  
-                                )}
+                                <th>Publish</th>
                             </thead>
                             <tbody>
                             {postsForCurrentPage.map((post, index) => (
@@ -355,8 +252,8 @@ function AllPost() {
                                         {post.title}
                                     </a>
                                     <div className="td-action-links">
-                                        {/* <a className="trash" onClick={()=>handleDeleteClick(post.id)}>Trash</a> */}
-                                        {/* <span className="inline-divider">|</span> */}
+                                        {/* <a className="trash" onClick={()=>handleDeleteClick(post.id)}>Trash</a>
+                                        <span className="inline-divider">|</span> */}
                                         <a className="edit" onClick={()=>handleEditClick(post)}>Edit</a>
                                     </div>
                                     </td>
@@ -364,15 +261,16 @@ function AllPost() {
                                     <td>{post.summary}</td> 
                                     <td>{post.views}</td>
                                     <td>
-                                        {role === 'ROLE_ADMIN' && (
-                                            <div>
-                                                <a style={{color:'red', cursor:'pointer', opacity:'1'}}
-                                                    onClick={()=>handleUnpublish(post.id)}
-                                                    onMouseOver={(e) => e.target.style.opacity = '0.7'}
-                                                    onMouseOut={(e) => e.target.style.opacity = '1'} 
-                                                >UnPublish</a>
-                                            </div>
-                                        )}
+                                        {/* <a href={post.publishLink}>
+                                            {post.published ? 'Publish' : 'Unpublish'}
+                                        </a> */}
+                                        <div>
+                                            <a style={{color:'red', cursor:'pointer', opacity:'1'}}
+                                                onClick={()=>handlePublish(post.id)}
+                                                onMouseOver={(e) => e.target.style.opacity = '0.7'}
+                                                onMouseOut={(e) => e.target.style.opacity = '1'} 
+                                            >publish</a>
+                                        </div>
                                     </td>
                                 </tr>
                             ))}
@@ -402,4 +300,4 @@ function AllPost() {
      );
 }
 
-export default AllPost
+export default Unpublished
